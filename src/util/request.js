@@ -15,6 +15,7 @@ let configUrl=null
 // request拦截器
 service.interceptors.request.use(config => {
   configUrl = config.url
+  console.log(configUrl)
   if(config.url!="/user/getKey"){
     config.headers['decry-content'] = encryption()
   }

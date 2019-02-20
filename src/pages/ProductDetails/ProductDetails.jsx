@@ -3,8 +3,11 @@ import './ProductDetails.css'
 import { Row, Col, Drawer, Radio, message,Button,Spin,Carousel  } from 'antd';
 import {getCookie, setCookie} from "../../util/Cookie"
 import {getProductDetails,priceCalculation,getUserInfo} from "../../api/index"
+import {PublicKey} from "../../util/encryption"
 
-
+if(getCookie("publicKey")==null||getCookie("publicKey")==''){
+    PublicKey()
+}
 const height = document.documentElement.clientHeight
 const RadioGroup = Radio.Group;
 const fromImg = require("../../images/member_img_avatar@2x.png")
@@ -14,7 +17,7 @@ class ProductDetails extends Component {
         this.state={
             loading:true,
             visible:false,
-            fromInfo:[],
+            fromInfo:{},
             image:'',
             images:[],
             variants:[{
@@ -24,15 +27,17 @@ class ProductDetails extends Component {
             data:{},
             DrawerImage:'',
             DrawerPrice:'',
-            // 请求参数
+            //请求参数
             count:1,
             selectID:null,
             
         }
+        
     }
     componentDidMount(){
         window.scrollTo(0,0)
-        if(getCookie('fromInfoStr')){
+        let inviterinfo = getCookie('fromInfoStr')
+        if(inviterinfo!=null&&inviterinfo!=''){
             let fromInfoStr= getCookie('fromInfoStr')
             let fromInfo = JSON.parse(fromInfoStr)
             this.setState({fromInfo:fromInfo})
@@ -42,14 +47,26 @@ class ProductDetails extends Component {
         }else if(getCookie('selectedProductId')!=null){
             this.getDetails(getCookie('selectedProductId'))
         }else{
-            this.props.history.goBack()
+            const url = window.location.href
+            let productIdArr = url.match(/[^a-zA-Z0-9]id{1,2}=([0-9\-]+)/)
+            if(productIdArr){
+                if(productIdArr.length>1){
+                    let productId = productIdArr[1]
+                    setCookie('selectedProductId',productId,1)
+                    this.getDetails(productId)
+                  }else{
+                    this.props.history.goBack()
+                  }
+            }else{
+                this.props.history.goBack()
+            }
         }
     }
     // 获取商品详情
     getDetails=(id)=>{
         getProductDetails(id).then((res)=>{
             console.log(res)
-            if(res.code==0){
+            if(res.code===0){
                 for(let i=0;i<res.data.variants.length;i++){
                     for(let j=0;j<res.data.images.length;j++){
                         if(res.data.variants[i].image_id==res.data.images[j].id){
@@ -197,26 +214,26 @@ class ProductDetails extends Component {
                 </div>
                 <div className="ProductInfos">
                     <p className="ProductDes">{this.state.data.title}</p>
-                    {/* <div style={{marginTop:16}}>
-                        <span className="ProductPrice">Rp {this.state.variants[0].price}</span>
-                    </div> */}
                     <Row style={{marginTop:5}}>
-                        {/* <Col span={12} className="vipPrice">Member  Rp {this.state.variants[0].compare_at_price}</Col> */}
                         <Col span={12}><span className="ProductPrice">Rp {this.state.variants[0].price}</span></Col>
                         <Col span={12} className="SalesCount">{this.state.data.buy_number} orang telah membeli</Col>
                     </Row>
                 </div>
-                <div className="user">
-                    <Row>
-                        <Col span={6} className="userImg">
-                            <img src={fromImg} alt=""/> 
-                        </Col>
-                        <Col span={18} className="suerText">
-                            <p className="user_Name">{this.state.fromInfo.nickName==null?"xxxxxxxx":this.state.fromInfo.nickName}</p>
-                            <p className="userInviteText">Jemput anda membeli bersama! </p>
-                        </Col>
-                    </Row>
-                </div>
+                {
+                    this.state.fromInfo.id==null||this.state.fromInfo.id==''?null:(
+                        <div className="user">
+                            <Row>
+                                <Col span={6} className="userImg">
+                                    <img src={fromImg} alt=""/> 
+                                </Col>
+                                <Col span={18} className="suerText">
+                                    <p className="user_Name">{this.state.fromInfo.nickName==null?"xxxxxxxx":this.state.fromInfo.nickName}</p>
+                                    <p className="userInviteText">Jemput anda membeli bersama! </p>
+                                </Col>
+                            </Row>
+                        </div>
+                    )
+                }
                 <div className="Info">
                     <div dangerouslySetInnerHTML={{__html: this.state.data.body_html}}/>
                 </div>

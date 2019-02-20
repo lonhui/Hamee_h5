@@ -24,7 +24,7 @@ class SignUpPage extends Component {
             phone:'',
             password:'',
             code:'',
-            RuleAgreedStatus:false,
+            RuleAgreedStatus:true,
         }
     }
     // 验证码倒计时

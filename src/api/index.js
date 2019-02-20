@@ -16,8 +16,7 @@ const getProducts=(params)=>{
 // 获取商品详情
 const getProductDetails=(id)=>{
   return request({
-    url: '/product/detail/'+id,
-    headers:{"ED-UUID":ED_UUID},
+    url: '/product/detail/'+Number(id),
     method: 'get',
   })
 }

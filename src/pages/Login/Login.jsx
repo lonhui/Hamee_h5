@@ -19,7 +19,7 @@ class Login extends Component {
             loading:false,
             eyeStatus:false,
             countyCode:'62',//国家码
-            RuleAgreedStatus:false,
+            RuleAgreedStatus:true,
             // 用户输入参数
             phone:'',
             password:''
