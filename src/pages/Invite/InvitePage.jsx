@@ -109,7 +109,7 @@ class InvitePage extends Component {
   }
   OneClickOpening=()=>{
     if(this.state.userType>0){
-      message.warning("Sedang Dikembangkan！！！")
+      window.postMessage("Share")
     }else{
       const GiftPackages_height = document.getElementById("GiftPackages").offsetTop;
       document.getElementsByClassName("InvitePage")[0].scrollTop=GiftPackages_height
