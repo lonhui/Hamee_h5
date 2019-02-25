@@ -114,16 +114,16 @@ class addAreaPage extends Component {
             <div className="addAreaPage" style={{height:height}}>
                 <div className="form">
                     <div className="Receiver">
-                        <p><span>*</span> Receiver</p>
+                        <p><span>*</span> Penerima</p>
                         <input type="text" value={this.state.receiver} onChange={this.onChangeReceiver}/>
                     </div>
                     <div className="CellphoneNumber">
-                        <p><span>*</span> Cellphone number</p>
+                        <p><span>*</span> Nomor Telepon</p>
                         <input type="number" value={this.state.phone} onChange={this.onChangePhone}/>
                     </div>
 
                     <div className="Area">
-                        <p><span>*</span> Area</p>
+                        <p><span>*</span> Provinsi, kota</p>
                         <div className="AreaButton" onClick={this.showDrawer}>
                             <span>{this.state.province==''&&this.state.city==''?'':this.state.province+","+this.state.city}</span>
                             <Icon type="down" />
@@ -132,16 +132,16 @@ class addAreaPage extends Component {
                     </div>
 
                     <div className="Address">
-                        <p><span>*</span> Address</p>
+                        <p><span>*</span> Alamat</p>
                         <input type="text" value={this.state.address} onChange={this.onChangeAddress}/>
                     </div>
                     <Row className="defaultAddress">
-                        <Col span={18}>Set as the default address (this address will be used each time you place an order)</Col>
+                        <Col span={18}>Jadikan sebagai alamat Utama </Col>
                         <Col span={2}></Col>
                         <Col span={4} className="defaultAddressButton"><Switch disabled={true} checked={this.state.checked} onChange={this.onChange} /></Col>
                     </Row>
                     <div className={this.state.saveButtonStatus?"SaveButton":"SaveButton_N"} onClick={this.svaeButton}>
-                        Save
+                        Simpan
                     </div>
                     {/* 地区选择弹框 */}
                     <Drawer

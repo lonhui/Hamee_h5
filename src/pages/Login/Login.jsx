@@ -68,29 +68,29 @@ class Login extends Component {
         <Spin spinning={this.state.loading} tip="Loading...">
             <div className="Login" style={{height:height}}>
                 <div className="title">
-                    <span className="log">log in</span>
+                    <span className="log">masuk id</span>
                 </div>
 
                 <div className="userName">
                     <img src={require("../../images/login_icon_phone@2x.png")} alt=""/>
-                    <span>Phone Number</span>
+                    <span>Nomor telefon</span>
                     <Row style={{color:'#fff',border:"1px #fff solid",borderRadius:12,marginTop:10}}>
                         <Col span={4} className="AreaCode">
                             <img src={require("../../images/login_icon_down@2x.png")} alt=""/>
                             <span>+62</span>
                         </Col>
                         <Col span={20}>
-                            <input type="number" placeholder="Please enter your phone number" value={this.state.phone} onChange={this.onChangePhone}/>
+                            <input type="number" placeholder="Silahkan masukkan nomor telefon anda" value={this.state.phone} onChange={this.onChangePhone}/>
                         </Col>
                     </Row>
                 </div>
 
                 <div className="password">
                     <img src={require("../../images/login_icon_password@2x.png")} />
-                    <span>Password</span>
+                    <span>sandi</span>
                     <Row className="password_input">
                         <Col span={21}>
-                            <input type={this.state.eyeStatus?"text":"password"} placeholder="Please enter your password" value={this.state.password} onChange={this.onChangePassword}/>
+                            <input type={this.state.eyeStatus?"text":"password"} placeholder="Silahkan masukkan password anda" value={this.state.password} onChange={this.onChangePassword}/>
                         </Col>
                         <Col span={3}>
                             <img src={this.state.eyeStatus?eye_y:eye_n} onClick={()=>{
@@ -105,7 +105,7 @@ class Login extends Component {
                     {/* <Col span={12} className="forget"><span>Forget password</span></Col> */}
                     <Col span={24} className="sign"><span onClick={()=>{
                         this.props.history.push('/SignUp')
-                    }}>Sign up</span></Col>
+                    }}>Daftar baru</span></Col>
                 </Row>
                  <div className="selectRule">
                     <img src={this.state.RuleAgreedStatus?agree:NoAgree} onClick={()=>{
@@ -113,10 +113,10 @@ class Login extends Component {
                     }}/>
                     <span onClick={()=>{
                         this.props.history.push('/UserAgreement')
-                    }}>I agreed to the Terms & Conditions</span>
+                    }}>Menyetujui syarat dan ketentuan</span>
                 </div>
                 <div className="loginButton" onClick={this.login}>
-                    <span>log in</span>
+                    <span>masuk id</span>
                 </div>
             </div>
       </Spin>

@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import {HashRouter, Route, Switch} from'react-router-dom';
 import {routers} from './Router/router'
 import 'antd/dist/antd.css';
+import './App.css'
+
 class App extends Component {
   render() {
     return (

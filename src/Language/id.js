@@ -21,7 +21,7 @@ const Invite={
     About_Hamme:"Tentang Hamee",
     HWBIETBTAYAEPWSTULSRTMSPSTMSTPOTESOTOTSAPTDOIS:"Hamee didirikan awal 2019. Lewat Hamee, member bisa mendapatkan penghasilan tambahan lewat komisi dari hasil menjual barang-barang Hamee serta cashback dari hasil mengajak teman bergabung. Belanja di Hamee pun juga lebih murah! Ayo gabung di Hamee!",
     One_Click_Opening:"Beli Paket Reseller",
-    One_click_sharing:"Berbagi Satu Klik",
+    One_click_sharing:"Bagikan Sekarang",
     You_are_already_a_member_of_our_Hame:"Anda sudah menjadi anggota Hame kami!"
 }
 

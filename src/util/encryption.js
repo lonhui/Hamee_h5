@@ -8,11 +8,13 @@ const encryption=()=>{
     let requestHeader={}
     let encryptHeader={}
 
-    requestHeader['User-Agent'] ="origin";
-    encryptHeader['User-Agent'] ="origin";
+    requestHeader['User-Agent'] =navigator.userAgent;
+    encryptHeader['User-Agent'] =navigator.userAgent;
     let publicKey = getCookie("publicKey")
-    requestHeader['ED-UUID'] = publicKey;
-    encryptHeader['ED-UUID'] = publicKey;
+    if(publicKey){
+        requestHeader['ED-UUID'] = publicKey;
+        encryptHeader['ED-UUID'] = publicKey;
+    }
     requestHeader['NETWORKSTATE'] = "wifi";
     encryptHeader['NETWORKSTATE'] = "wifi";
     

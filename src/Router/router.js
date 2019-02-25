@@ -68,6 +68,10 @@ const routers = [
         path:'/GoDownloadPage',
         component:loadable("/GoDownload/GoDownloadPage")
     },
+    {
+        path:'/ShareDetails',
+        component:loadable("/ProductDetails/ShareDetails")
+    },
     //条约页面
     {
         path:'/UserAgreement',

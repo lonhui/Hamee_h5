@@ -8,7 +8,14 @@ const getProducts=(params)=>{
   return request({
     url: '/product/getProductsForVip',
     method: 'get',
-    headers:{"ED-UUID":ED_UUID},
+    headers:{
+      "ED-UUID":ED_UUID,
+      "NETWORKSTATE":"wifi",
+      "User-Platform":"web",
+      "Market":"default",
+      "Accept-Language":navigator.language,
+      "n":"web"
+    },
     params
   })
 }
@@ -17,6 +24,14 @@ const getProducts=(params)=>{
 const getProductDetails=(id)=>{
   return request({
     url: '/product/detail/'+Number(id),
+    header:{
+      "ED-UUID":ED_UUID,
+      "NETWORKSTATE":"wifi",
+      "User-Platform":"web",
+      "Market":"default",
+      "Accept-Language":navigator.language,
+      "n":"web"
+    },
     method: 'get',
   })
 }
@@ -26,7 +41,15 @@ const addArea=(data)=>{
   return request({
     url:'/user/address/add',
     method:'post',
-    headers:{"Content-Type":"application/json","ED-UUID":ED_UUID},
+    headers:{
+      "Content-Type":"application/json",
+      "ED-UUID":ED_UUID,
+      "NETWORKSTATE":"wifi",
+      "User-Platform":"web",
+      "Market":"default",
+      "Accept-Language":navigator.language,
+      "n":"web"
+    },
     data
   })
 } 
@@ -36,6 +59,14 @@ const getUserInfo=(params)=>{
   return request({
     url:'/user/info',
     method:'get',
+    header:{
+      "ED-UUID":ED_UUID,
+      "NETWORKSTATE":"wifi",
+      "User-Platform":"web",
+      "Market":"default",
+      "Accept-Language":navigator.language,
+      "n":"web"
+    },
     params
   })
 }
@@ -46,7 +77,6 @@ const getAddress=(params)=>{
     url:'/user/address/list',
     headers:{
       "ED-UUID":ED_UUID,
-      "User-Agent":"origin",
       "NETWORKSTATE":"wifi",
       "User-Platform":"web",
       "Market":"default",
@@ -65,7 +95,6 @@ const createOrder=(data)=>{
     headers:{
       "Content-Type":"application/json",
       "ED-UUID":ED_UUID,
-      "User-Agent":"origin",
       "NETWORKSTATE":"wifi",
       "User-Platform":"web",
       "Market":"default",
@@ -83,7 +112,6 @@ const initiatePay=(data)=>{
     headers:{
       "Content-Type":"application/json",
       "ED-UUID":ED_UUID,
-      "User-Agent":"origin",
       "NETWORKSTATE":"wifi",
       "User-Platform":"web",
       "Market":"default",
@@ -98,7 +126,16 @@ const priceCalculation=(data)=>{
   return request({
     url:'/order/prepare',
     method:'post',
-    headers:{"Content-Type":"application/json","ED-UUID":ED_UUID},
+    headers:{
+      "Content-Type":"application/json",
+      "ED-UUID":ED_UUID,
+      "User-Agent":navigator.userAgent,
+      "NETWORKSTATE":"wifi",
+      "User-Platform":"web",
+      "Market":"default",
+      "Accept-Language":navigator.language,
+      "n":"web"
+    },
     data
   })
 }
@@ -108,7 +145,15 @@ const getSMS=(params)=>{
   return request({
     url:'/sms/send',
     method:'post',
-    headers:{"ED-UUID":ED_UUID},
+    headers:{
+      "ED-UUID":ED_UUID,
+      "User-Agent":navigator.userAgent,
+      "NETWORKSTATE":"wifi",
+      "User-Platform":"web",
+      "Market":"default",
+      "Accept-Language":navigator.language,
+      "n":"web"
+    },
     params
   })
 }
@@ -118,7 +163,16 @@ const signUp=(data)=>{
   return request({
     url:'/user/register',
     method:'post',
-    headers:{"Content-Type":"application/json","ED-UUID":ED_UUID},
+    headers:{
+      "Content-Type":"application/json",
+      "ED-UUID":ED_UUID,
+      "User-Agent":navigator.userAgent,
+      "NETWORKSTATE":"wifi",
+      "User-Platform":"web",
+      "Market":"default",
+      "Accept-Language":navigator.language,
+      "n":"web"
+    },
     data
   })
 } 
@@ -128,7 +182,16 @@ const login=(data)=>{
   return request({
     url:'/user/login',
     method:'post',
-    headers:{"Content-Type":"application/json","ED-UUID":ED_UUID},
+    headers:{
+      "Content-Type":"application/json",
+      "ED-UUID":ED_UUID,
+      "User-Agent":navigator.userAgent,
+      "NETWORKSTATE":"wifi",
+      "User-Platform":"web",
+      "Market":"default",
+      "Accept-Language":navigator.language,
+      "n":"web"
+    },
     data
   })
 }
@@ -137,8 +200,7 @@ const login=(data)=>{
 const getPublicKey=()=>{
   return request({
     url:'/user/getKey',
-    method:'post',
-    headers:{"Content-Type":"application/x-www-form-urlencoded"},
+    method:'post'
   })
 }
 

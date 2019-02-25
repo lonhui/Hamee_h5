@@ -8,7 +8,7 @@ import {PublicKey} from "../../util/encryption"
 const height = document.documentElement.clientHeight
 const RadioGroup = Radio.Group;
 const fromImg = require("../../images/member_img_avatar@2x.png")
-class ProductDetails extends Component {
+class ShareDetails extends Component {
     constructor(props){
         super(props);
         this.state={
@@ -27,36 +27,22 @@ class ProductDetails extends Component {
             //请求参数
             count:1,
             selectID:null,
-            
         }
-        
     }
     componentDidMount(){
-        window.scrollTo(0,0)
-        let inviterinfo = getCookie('fromInfoStr')
-        if(inviterinfo!=null&&inviterinfo!=''){
-            let fromInfoStr= getCookie('fromInfoStr')
-            let fromInfo = JSON.parse(fromInfoStr)
-            this.setState({fromInfo:fromInfo})
-        }
-        if(this.props.location.state){
-            this.getDetails(this.props.location.state.id)
-        }else if(getCookie('selectedProductId')!=null){
-            this.getDetails(getCookie('selectedProductId'))
-        }else{
-            const url = window.location.href
-            let productIdArr = url.match(/[^a-zA-Z0-9]id{1,2}=([0-9\-]+)/)
-            if(productIdArr){
-                if(productIdArr.length>1){
-                    let productId = productIdArr[1]
-                    setCookie('selectedProductId',productId,1)
-                    this.getDetails(productId)
-                  }else{
-                    this.props.history.goBack()
-                  }
+        const publicKey = PublicKey()
+        const url = window.location.href
+        let productIdArr = url.match(/[^a-zA-Z0-9]id{1,2}=([0-9\-]+)/)
+        if(productIdArr){
+            if(productIdArr.length>1){
+                let productId = productIdArr[1]
+                setCookie('selectedProductId',productId,1)
+                this.getDetails(productId)
             }else{
-                this.props.history.goBack()
+                this.props.history.push({pathname: `/`})
             }
+        }else{
+            this.props.history.push({pathname: `/`})
         }
     }
     // 获取商品详情
@@ -151,17 +137,13 @@ class ProductDetails extends Component {
     }
     // 开启弹窗
     showDrawer = () => {
+
         // 判断链接是否携带邀请人id
-        let InviterId = getCookie("InviterId")
-        if(InviterId==null||InviterId==""){
-            message.error("If you have not obtained a referral, please contact the referrer to re-acquire the link!")
-        }else{
-            this.setState({
-                visible: true,
-                DrawerImage:this.state.variants[0].imageUrl,
-                DrawerPrice:this.state.variants[0].price,
-            });
-        }
+        // this.setState({
+        //     visible: true,
+        //     DrawerImage:this.state.variants[0].imageUrl,
+        //     DrawerPrice:this.state.variants[0].price,
+        // });
     };
     // 关闭弹窗
     onClose = () => {this.setState({visible: false,});};
@@ -225,7 +207,7 @@ class ProductDetails extends Component {
                                 </Col>
                                 <Col span={18} className="suerText">
                                     <p className="user_Name">{this.state.fromInfo.nickName==null?"xxxxxxxx":this.state.fromInfo.nickName}</p>
-                                    <p className="userInviteText">Mengajak anda untuk bergabung! </p>
+                                    <p className="userInviteText">Jemput anda membeli bersama! </p>
                                 </Col>
                             </Row>
                         </div>
@@ -235,11 +217,13 @@ class ProductDetails extends Component {
                     <div dangerouslySetInnerHTML={{__html: this.state.data.body_html}}/>
                 </div>
                 <div className="footer">
-                    <div className="pay_Button" onClick={this.showDrawer} >
-                        <p>Beli Sekarang</p>
-                    </div>
+                    <a href="https://play.google.com/store/apps/details?id=com.hamee">
+                        <div className="pay_Button" onClick={this.showDrawer} >
+                            <p>Go download</p>
+                        </div>
+                    </a>
                 </div>
-                <Drawer placement="bottom" height={450} closable={false} onClose={this.onClose} visible={this.state.visible} className="Drawer">
+                {/* <Drawer placement="bottom" height={450} closable={false} onClose={this.onClose} visible={this.state.visible} className="Drawer">
                     <img className="endImg" src={require("../../images/home_icon_close@2x.png")} onClick={this.onClose} alt=""/>
                     <div className="DrawerBox">
                         <Row>
@@ -260,16 +244,16 @@ class ProductDetails extends Component {
                         </RadioGroup>
                         <p className="SelectTitle">Jumlah</p>
                         <Row className="numberSelect">
-                            <Col span={2}><Button shape="circle" icon="minus" size="small" disabled onClick={this.less}/></Col>
+                            <Col span={2}><Button shape="circle" icon="minus" size="small" onClick={this.less}/></Col>
                             <Col span={6} className="DrawerNumber"><p>{this.state.count}</p></Col>
-                            <Col span={2}><Button shape="circle" icon="plus" size="small" disabled onClick={this.add}/></Col>
+                            <Col span={2}><Button shape="circle" icon="plus" size="small" onClick={this.add}/></Col>
                             <Col span={14}></Col>
                         </Row>
                     </div>
                     <div className="define_Button" onClick={this.pay}>
                         <p>Beli</p>
                     </div>
-                </Drawer>
+                </Drawer> */}
             </div>
         </Spin>
     );
@@ -277,4 +261,4 @@ class ProductDetails extends Component {
 }
 
 
-export default ProductDetails;
+export default ShareDetails;

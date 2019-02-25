@@ -74,7 +74,9 @@ class GoDownloadPage extends Component {
                     </Row> */}
 
                     <div className="DownloadButton">
-                        <p>Go download</p>
+                        <a href="https://play.google.com/store/apps/details?id=com.hamee">
+                            <p style={{color:'#fff'}}>Go download</p>
+                        </a>
                     </div>
                 </div>
           </div>
