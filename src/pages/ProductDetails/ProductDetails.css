@@ -59,10 +59,13 @@ p{
     width: 44px;
     margin-top: 11px;
 }
+.suerText p{
+    margin-bottom: 0
+}
 .user_Name{
-    font-size: 12px;
+    font-size: 14px;
     color: #fff;
-    line-height: 17px;
+    font-weight: 600;
     margin-top: 12px;
     text-align: left;
 }
@@ -71,7 +74,6 @@ p{
     color: #fff;
     line-height: 20px;
     font-weight: 600;
-    margin-top: 5px;
     text-align: left;
 }
 .Info{

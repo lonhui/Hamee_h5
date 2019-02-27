@@ -34,43 +34,5 @@
       You need to enable JavaScript to run this app.
     </noscript>
     <div id="root"></div>
-    
-    <script>
-      function getOptions(options){
-        let optionsJson = JSON.parse(options)
-        if(optionsJson.token){
-          setCookie('token',optionsJson.token,1)
-        }
-        if(optionsJson.uid){
-          setCookie('uid',optionsJson.uid,1)
-        }
-        if(optionsJson.publicKey){
-          setCookie('publicKey',optionsJson.publicKey,1)
-        }
-        if(optionsJson.type){
-          setCookie('type',optionsJson.type,1)
-        }
-      }
-
-      function setCookie(key,value,exdays){//(cookie的key值,cookie的value值,cookie保存的天数)
-          let exdate = new Date();//获取时间
-          key=key.trim();
-          exdate.setTime(exdate.getTime()+24*60*60*1000*exdays);//保存天数
-          window.document.cookie=key+"="+value+";path=/;expires="+exdate.toGMTString();
-      }
-      function clearCookie(key){
-          setCookie(key,'',-1)
-      }
-    </script>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
-
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
   </body>
 </html>

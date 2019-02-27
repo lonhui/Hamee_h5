@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Row, Col,Spin,message } from 'antd';
-import {setCookie, getCookie} from '../../util/Cookie'
+import {setCookie, getCookie,clearCookie} from '../../util/Cookie'
 import "./InvitePage.css"
 import Product from "../../components/Product/Product"
 import {getProducts,getUserInfo} from "../../api/index"
@@ -19,6 +19,7 @@ class InvitePage extends Component {
     super(props);
     this.state={
       fromInfo:[],
+      userNames:['user01','user02','user03','user04','user05','user06','user07','user08','user09','user10','user11','user12','user13','user14','user15','user16','user17','user18','user19','user20'],
       data:[
         {
           id:1,
@@ -33,18 +34,58 @@ class InvitePage extends Component {
       InviterId:'',
       loading:true,
       userType:0,
+      // 动画参数
+      MoveUp:90,
+      transparency:1,
+      backColor:'rgba(232,231,246,1)',
+      textColor:'rgba(7,7,7,1)',
+      testName:'xxx'
+    }
+    if(getCookie('name')){
+      this.getAppCookie()
     }
     if(getCookie("type")){
       this.state.userType=Number(getCookie("type"))
     }
   }
   componentDidMount(){
+    if(this.state.userType!=0){
+      this.setState({
+        MoveUp:20
+      })
+    }
     window.scrollTo(0,0)
     this.getProductList()
     const url = window.location.href
     let InviterIdArray = url.match(/[^a-zA-Z0-9]InviterId{1,9}=([0-9\-]+)/)
     if(InviterIdArray){
       this.getInviterId(InviterIdArray)
+    }
+    this.ScrollAnimation()
+  }
+  // 获取app传递过来的cookie
+  getAppCookie(){
+    let appCookies = getCookie('name')
+    if(appCookies){
+      appCookies=JSON.parse(appCookies)
+      if(appCookies.key){
+        setCookie('publicKey',appCookies.key,1)
+      }
+      if(appCookies.isVip!=null){
+        setCookie('type',appCookies.isVip?1:0,1)
+      }else{
+        // clearCookie('type')
+      }
+      if(appCookies.id){
+        setCookie('uid',appCookies.id,1)
+      }else{
+        // clearCookie('uid')
+      }
+      if(appCookies.token){
+        setCookie('token',appCookies.token,1)
+      }else{
+        // clearCookie('token')
+      }
     }
   }
   //获取url上携带的邀请人id
@@ -123,18 +164,63 @@ class InvitePage extends Component {
       this.props.history.push({pathname: `/ProductDetails`, state: {id:id}})
     }
   }
+  // 滚动通知动画
+  ScrollAnimation=()=>{
+    let limit
+    this.state.userType!=0?limit=0:limit=70
+    let count = 0
+    this.setState({
+      testName:this.getname()
+    })
+    let timer = setInterval(()=>{
+        if(count>10){
+          this.setState({
+            MoveUp:this.state.MoveUp-1,
+            transparency:this.state.transparency-0.05
+          })
+          this.setState({
+            backColor:'rgba(232,231,246,'+this.state.transparency+')',
+            textColor:'rgba(7,7,7,'+this.state.transparency+')',
+          })
+        }
+        ++count
+        // 如果上升到某个位置，回到原点显示下一个用户
+        if(this.state.MoveUp<limit-5){
+          this.setState({
+            MoveUp:limit+20,
+            transparency:1,
+            backColor:"rgba(232,231,246,1)",
+            textColor:'rgba(7,7,7,1)',
+            testName:this.getname()
+          })
+          count=0
+          // clearInterval(timer)
+        }
+    },100)
+  }
+  getname=()=>{
+    let a = Math.floor((Math.random()+1)*10)
+    let name = this.state.userNames[a]
+    return name
+  }
   render() {
     return (
       <Spin spinning={this.state.loading} tip="Loading...">
         <div className="InvitePage" style={{height:height}} id="abc">
+        {/*头部邀请人信息*/}
+        {
+          this.state.userType>0?null:(
+            <div className="InviteText">
+                <Row>
+                    <Col span={4}><img src={fromImg} alt=""/></Col>
+                    <Col span={20}><p>{this.state.fromInfo.nickName==null?"xxxxxxxx":this.state.fromInfo.nickName} mengajak Anda untuk menjadi member Hamee</p></Col>
+                </Row>
+            </div>
+          )
+        }
           <div className="InviteHeader">
-                {/*头部提示信息*/}
-                <div className="InviteText">
-                    <Row>
-                        <Col span={4}><img src={fromImg} alt=""/></Col>
-                        <Col span={20}><p>{this.state.fromInfo.nickName==null?"xxxxxxxx":this.state.fromInfo.nickName} mengajak Anda untuk menjadi member Hamee</p></Col>
-                    </Row>
-                </div>
+                <div style={{height:70}}></div>
+                
                 {/* 头部文字 */}
                 <div className='Invite_title'>
                     <p>{Invite.SPEND_LESS}</p>
@@ -222,6 +308,11 @@ class InvitePage extends Component {
           </div>
           <div className="openingButton" onClick={this.OneClickOpening}>
                 <p>{this.state.userType>0?Invite.One_click_sharing:Invite.One_Click_Opening}</p>
+          </div>
+          {/* 滚动通知 */}
+          <div style={{height:26,backgroundColor:this.state.backColor,borderRadius:15,position:'absolute',top:this.state.MoveUp,left:10,paddingRight:8}}>
+            <img style={{height:26,width:26,position:'relative',bottom:1,opacity:this.state.transparency,marginRight:5}} src={require("../../images/home_img_avatar@2x.png")} alt=""/>
+            <span style={{color:this.state.textColor,fontSize:12,lineHeight:'25px'}}>User {this.state.testName} telah menjadi Member...</span>
           </div>
         </div>
       </Spin>
