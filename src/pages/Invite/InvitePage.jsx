@@ -3,9 +3,11 @@ import { Row, Col,Spin,message } from 'antd';
 import {setCookie, getCookie,clearCookie} from '../../util/Cookie'
 import "./InvitePage.css"
 import Product from "../../components/Product/Product"
-import {getProducts,getUserInfo} from "../../api/index"
+import {getProducts,getInviterInfo,getBarrageList,getUserInfo} from "../../api/index"
 import {PublicKey} from '../../util/encryption'
 import {Invite} from '../../Language/id'
+
+import axios from 'axios'
 
 if(getCookie("publicKey")==null||getCookie("publicKey")==''){
   const publicKey = PublicKey()
@@ -19,7 +21,8 @@ class InvitePage extends Component {
     super(props);
     this.state={
       fromInfo:[],
-      userNames:['user01','user02','user03','user04','user05','user06','user07','user08','user09','user10','user11','user12','user13','user14','user15','user16','user17','user18','user19','user20'],
+      userNames:[],
+      nameIndex:1,
       data:[
         {
           id:1,
@@ -49,6 +52,7 @@ class InvitePage extends Component {
     }
   }
   componentDidMount(){
+    // 判断用户是否是会员
     if(this.state.userType!=0){
       this.setState({
         MoveUp:20
@@ -56,12 +60,19 @@ class InvitePage extends Component {
     }
     window.scrollTo(0,0)
     this.getProductList()
+    this.getBarrageList()
     const url = window.location.href
     let InviterIdArray = url.match(/[^a-zA-Z0-9]InviterId{1,9}=([0-9\-]+)/)
     if(InviterIdArray){
       this.getInviterId(InviterIdArray)
+    }else{
+      if(getCookie('uid')){
+        // 获取用户上线
+        this.getUserInfo()
+      }
     }
-    this.ScrollAnimation()
+    
+    this.ScrollAnimation()// 开始动画
   }
   // 获取app传递过来的cookie
   getAppCookie(){
@@ -95,15 +106,33 @@ class InvitePage extends Component {
       setCookie('InviterId',InviterId,1)
       this.setState({InviterId:InviterId})
       // 获取邀请人信息
-      this.getUserInfo(InviterId)
+      this.getInviterInfo(InviterId)
     }
   }
+  // 获取用户信息
+  getUserInfo=()=>{
+    let data={
+      uid:getCookie('uid')
+    }
+    getUserInfo(data).then((res)=>{
+      console.log(res)
+      if(res.code==0){
+        this.setState({
+          InviterId:res.data.refUid
+        })
+        setCookie('InviterId',res.data.refUid,1)
+        this.getInviterInfo(res.data.refUid)
+      }
+    }).catch((error)=>{
+      console.log(error)
+    })
+  }
   // 获取邀请人信息
-  getUserInfo=(InviterId)=>{
+  getInviterInfo=(InviterId)=>{
     let data={
       uid:parseInt(InviterId)
     }
-    getUserInfo(data).then((res)=>{
+    getInviterInfo(data).then((res)=>{
       console.log(res)
       if(res.code==0){
         this.setState({fromInfo:res.data.data})
@@ -114,7 +143,26 @@ class InvitePage extends Component {
       console.log(error)
     })
   }
-  
+  //获取弹幕名单
+  getBarrageList=()=>{
+    getBarrageList().then((res)=>{
+      console.log(res)
+      if(res.code==0){
+        if(this.state.userNames.length>0){
+          let data = this.state.userNames.concat(res.data)
+          this.setState({
+            userNames:data
+          })
+        }else{
+          this.setState({
+            userNames:res.data
+          })
+        }
+      }
+    }).catch((error)=>{
+      console.log(error)
+    })
+  }
   // 获取礼包列表
   getProductList=()=>{
     getProducts().then((res)=>{
@@ -199,7 +247,12 @@ class InvitePage extends Component {
     },100)
   }
   getname=()=>{
-    let a = Math.floor((Math.random()+1)*10)
+    let a = Number(this.state.nameIndex)
+    if(a>120){
+      this.getBarrageList()
+    }
+    console.log(a)
+    this.setState({nameIndex:++this.state.nameIndex})
     let name = this.state.userNames[a]
     return name
   }
@@ -213,14 +266,13 @@ class InvitePage extends Component {
             <div className="InviteText">
                 <Row>
                     <Col span={4}><img src={fromImg} alt=""/></Col>
-                    <Col span={20}><p>{this.state.fromInfo.nickName==null?"xxxxxxxx":this.state.fromInfo.nickName} mengajak Anda untuk menjadi member Hamee</p></Col>
+                    <Col span={20}><p>{this.state.fromInfo.nickName==null?"Hamee":this.state.fromInfo.nickName} mengajak Anda untuk menjadi member Hamee</p></Col>
                 </Row>
             </div>
           )
         }
           <div className="InviteHeader">
                 <div style={{height:70}}></div>
-                
                 {/* 头部文字 */}
                 <div className='Invite_title'>
                     <p>{Invite.SPEND_LESS}</p>
@@ -310,10 +362,14 @@ class InvitePage extends Component {
                 <p>{this.state.userType>0?Invite.One_click_sharing:Invite.One_Click_Opening}</p>
           </div>
           {/* 滚动通知 */}
-          <div style={{height:26,backgroundColor:this.state.backColor,borderRadius:15,position:'absolute',top:this.state.MoveUp,left:10,paddingRight:8}}>
-            <img style={{height:26,width:26,position:'relative',bottom:1,opacity:this.state.transparency,marginRight:5}} src={require("../../images/home_img_avatar@2x.png")} alt=""/>
-            <span style={{color:this.state.textColor,fontSize:12,lineHeight:'25px'}}>User {this.state.testName} telah menjadi Member...</span>
-          </div>
+          {
+            this.state.userNames.length>0?(
+              <div style={{height:26,backgroundColor:this.state.backColor,borderRadius:15,position:'absolute',top:this.state.MoveUp,left:10,paddingRight:8}}>
+                <img style={{height:26,width:26,position:'relative',bottom:1,opacity:this.state.transparency,marginRight:5}} src={require("../../images/home_img_avatar@2x.png")} alt=""/>
+                <span style={{color:this.state.textColor,fontSize:12,lineHeight:'25px'}}>User {this.state.testName} telah menjadi Member...</span>
+              </div>
+            ):null
+          }
         </div>
       </Spin>
     );

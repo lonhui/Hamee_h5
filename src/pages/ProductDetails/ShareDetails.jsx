@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './ProductDetails.css'
 import { Row, Col, Drawer, Radio, message,Button,Spin,Carousel  } from 'antd';
 import {getCookie, setCookie} from "../../util/Cookie"
-import {getProductDetails,priceCalculation,getUserInfo} from "../../api/index"
+import {getProductDetails,priceCalculation,getInviterInfo} from "../../api/index"
 import {PublicKey} from "../../util/encryption"
 
 const height = document.documentElement.clientHeight
@@ -95,7 +95,7 @@ class ShareDetails extends Component {
     }
     getUserInfo=(uid)=>{
         console.log(uid)
-        getUserInfo({uid:uid}).then((res)=>{
+        getInviterInfo({uid:uid}).then((res)=>{
             console.log(res)
             if(res.code==0){
                 return res.data.level

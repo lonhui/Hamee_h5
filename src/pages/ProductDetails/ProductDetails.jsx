@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './ProductDetails.css'
 import { Row, Col, Drawer, Radio, message,Button,Spin,Carousel  } from 'antd';
 import {getCookie, setCookie} from "../../util/Cookie"
-import {getProductDetails,priceCalculation,getUserInfo} from "../../api/index"
+import {getProductDetails,priceCalculation,getInviterInfo} from "../../api/index"
 import {PublicKey} from "../../util/encryption"
 
 const height = document.documentElement.clientHeight
@@ -109,7 +109,7 @@ class ProductDetails extends Component {
     }
     getUserInfo=(uid)=>{
         console.log(uid)
-        getUserInfo({uid:uid}).then((res)=>{
+        getInviterInfo({uid:uid}).then((res)=>{
             console.log(res)
             if(res.code==0){
                 return res.data.level
@@ -154,7 +154,8 @@ class ProductDetails extends Component {
         // 判断链接是否携带邀请人id
         let InviterId = getCookie("InviterId")
         if(InviterId==null||InviterId==""){
-            message.error("If you have not obtained a referral, please contact the referrer to re-acquire the link!")
+            this.props.history.push({pathname: `/Login`})
+            // message.error("If you have not obtained a referral, please contact the referrer to re-acquire the link!")
         }else{
             this.setState({
                 visible: true,
@@ -224,7 +225,7 @@ class ProductDetails extends Component {
                                     <img src={fromImg} alt=""/> 
                                 </Col>
                                 <Col span={18} className="suerText">
-                                    <p className="user_Name">{this.state.fromInfo.nickName==null?"xxxxxxxx":this.state.fromInfo.nickName}</p>
+                                    <p className="user_Name">{this.state.fromInfo.nickName==null?"Hamee":this.state.fromInfo.nickName}</p>
                                     <p className="userInviteText">Mengajak anda untuk bergabung! </p>
                                 </Col>
                             </Row>

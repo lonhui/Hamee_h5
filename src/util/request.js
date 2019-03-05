@@ -4,7 +4,7 @@ import {encryption} from './encryption'
 
 // 创建axios实例
 const service = axios.create({
-  baseURL: 'https://api.hamee.id', // api的base_url
+  baseURL: 'https://api.hamee.id', // http://staging.yogrt.co:801
   timeout: 15000 // 请求超时时间
 })
 

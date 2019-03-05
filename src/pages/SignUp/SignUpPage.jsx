@@ -86,6 +86,7 @@ class SignUpPage extends Component {
                 if(res.code===0){
                     message.success('registration success!')
                     setCookie('uid',res.data.id,1)
+                    setCookie('token',res.data.token,1)
                     this.props.history.push('/OrderPage')
                 }else{
                     this.setState({loading:false})

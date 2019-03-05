@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Row, Col, message, Spin} from 'antd';
-import {setCookie} from '../../util/Cookie'
+import {setCookie,getCookie} from '../../util/Cookie'
 import "./Login.css"
-import {login} from "../../api/index";
+import {login,getUserInfo,getInviterInfo} from "../../api/index";
 
 var height = window.screen.height;
 
@@ -48,8 +48,13 @@ class Login extends Component {
                         setCookie('token',res.data.token,1)
                         setCookie('type',res.data.level,1)
                         message.success('login successful!')
-                        this.setState({loading:false})
-                        this.props.history.push('/OrderPage')
+                        if(getCookie('InviterId')){
+                            this.setState({loading:false})
+                            this.props.history.goBack()
+                            // this.props.history.push('/OrderPage')
+                        }else{
+                            this.getUserInfo()
+                        }
                     }else{
                         this.setState({loading:false})
                     }
@@ -59,6 +64,48 @@ class Login extends Component {
             }
         }
     }
+
+    // 获取用户信息
+  getUserInfo=()=>{
+    let data={
+      uid:getCookie('uid')
+    }
+    getUserInfo(data).then((res)=>{
+      console.log(res)
+      if(res.code==0){
+        this.setState({
+          InviterId:res.data.refUid
+        })
+        setCookie('InviterId',res.data.refUid,1)
+        this.getInviterInfo(res.data.refUid)
+      }else{
+        this.setState({loading:false})
+      }
+    }).catch((error)=>{
+        this.setState({loading:false})
+      console.log(error)
+    })
+  }
+
+  // 获取邀请人信息
+  getInviterInfo=(InviterId)=>{
+    let data={
+      uid:parseInt(InviterId)
+    }
+    getInviterInfo(data).then((res)=>{
+      console.log(res)
+      if(res.code==0){
+        this.setState({fromInfo:res.data.data})
+        let fromInfoStr = JSON.stringify(res.data.data)
+        setCookie("fromInfoStr",fromInfoStr,1)
+        this.props.history.goBack()
+      }
+      this.setState({loading:false})
+    }).catch((error)=>{
+      console.log(error)
+      this.setState({loading:false})
+    })
+  }
     
     onChangePhone=(event)=>{this.setState({phone:event.target.value})}// 手机号输入
     onChangePassword=(event)=>{this.setState({password:event.target.value})}//密码输入
@@ -104,7 +151,11 @@ class Login extends Component {
                 <Row className="text_button">
                     {/* <Col span={12} className="forget"><span>Forget password</span></Col> */}
                     <Col span={24} className="sign"><span onClick={()=>{
-                        this.props.history.push('/SignUp')
+                        if(getCookie('InviterId')){
+                            this.props.history.push('/SignUp')
+                        }else{
+                            message.error("Jika Anda belum menerima rujukan, silakan hubungi wasit untuk mendapatkan tautan lagi!")
+                        }
                     }}>Daftar baru</span></Col>
                 </Row>
                  <div className="selectRule">

@@ -1,7 +1,23 @@
 import request from '../util/request.js';
 import {getCookie} from '../util/Cookie'
 
-const ED_UUID = getCookie('publicKey') 
+// const ED_UUID = getCookie('publicKey')
+
+// 获取弹幕
+const getBarrageList=()=>{
+  return request({
+    url:'/user/name/list',
+    method:'post',
+    headers:{
+      "ED-UUID":getCookie('publicKey'),
+      "NETWORKSTATE":"wifi",
+      "User-Platform":"web",
+      "Market":"default",
+      "Accept-Language":navigator.language,
+      "n":"web"
+    },
+  })
+}
 
 // 获取商品列表
 const getProducts=(params)=>{
@@ -9,7 +25,7 @@ const getProducts=(params)=>{
     url: '/product/getProductsForVip',
     method: 'get',
     headers:{
-      "ED-UUID":ED_UUID,
+      "ED-UUID":getCookie('publicKey'),
       "NETWORKSTATE":"wifi",
       "User-Platform":"web",
       "Market":"default",
@@ -24,8 +40,8 @@ const getProducts=(params)=>{
 const getProductDetails=(id)=>{
   return request({
     url: '/product/detail/'+Number(id),
-    header:{
-      "ED-UUID":ED_UUID,
+    headers:{
+      "ED-UUID":getCookie('publicKey'),
       "NETWORKSTATE":"wifi",
       "User-Platform":"web",
       "Market":"default",
@@ -43,7 +59,7 @@ const addArea=(data)=>{
     method:'post',
     headers:{
       "Content-Type":"application/json",
-      "ED-UUID":ED_UUID,
+      "ED-UUID":getCookie('publicKey'),
       "NETWORKSTATE":"wifi",
       "User-Platform":"web",
       "Market":"default",
@@ -53,14 +69,29 @@ const addArea=(data)=>{
     data
   })
 } 
-
-//获取用户信息
+// 获取用户信息
 const getUserInfo=(params)=>{
   return request({
     url:'/user/info',
+    method:'post',
+    headers:{
+      "ED-UUID":getCookie('publicKey'),
+      "NETWORKSTATE":"wifi",
+      "User-Platform":"web",
+      "Market":"default",
+      "Accept-Language":navigator.language,
+      "n":"web"
+    },
+    params
+  })
+}
+//获取邀请人信息
+const getInviterInfo=(params)=>{
+  return request({
+    url:'/user/info',
     method:'get',
-    header:{
-      "ED-UUID":ED_UUID,
+    headers:{
+      "ED-UUID":getCookie('publicKey'),
       "NETWORKSTATE":"wifi",
       "User-Platform":"web",
       "Market":"default",
@@ -76,7 +107,7 @@ const getAddress=(params)=>{
   return request({
     url:'/user/address/list',
     headers:{
-      "ED-UUID":ED_UUID,
+      "ED-UUID":getCookie('publicKey'),
       "NETWORKSTATE":"wifi",
       "User-Platform":"web",
       "Market":"default",
@@ -94,7 +125,7 @@ const createOrder=(data)=>{
     method:'post',
     headers:{
       "Content-Type":"application/json",
-      "ED-UUID":ED_UUID,
+      "ED-UUID":getCookie('publicKey'),
       "NETWORKSTATE":"wifi",
       "User-Platform":"web",
       "Market":"default",
@@ -111,7 +142,7 @@ const initiatePay=(data)=>{
     method:'post',
     headers:{
       "Content-Type":"application/json",
-      "ED-UUID":ED_UUID,
+      "ED-UUID":getCookie('publicKey'),
       "NETWORKSTATE":"wifi",
       "User-Platform":"web",
       "Market":"default",
@@ -128,8 +159,8 @@ const priceCalculation=(data)=>{
     method:'post',
     headers:{
       "Content-Type":"application/json",
-      "ED-UUID":ED_UUID,
-      "User-Agent":navigator.userAgent,
+      "ED-UUID":getCookie('publicKey'),
+      // "User-Agent":navigator.userAgent,
       "NETWORKSTATE":"wifi",
       "User-Platform":"web",
       "Market":"default",
@@ -146,8 +177,8 @@ const getSMS=(params)=>{
     url:'/sms/send',
     method:'post',
     headers:{
-      "ED-UUID":ED_UUID,
-      "User-Agent":navigator.userAgent,
+      "ED-UUID":getCookie('publicKey'),
+      // "User-Agent":navigator.userAgent,
       "NETWORKSTATE":"wifi",
       "User-Platform":"web",
       "Market":"default",
@@ -165,8 +196,8 @@ const signUp=(data)=>{
     method:'post',
     headers:{
       "Content-Type":"application/json",
-      "ED-UUID":ED_UUID,
-      "User-Agent":navigator.userAgent,
+      "ED-UUID":getCookie('publicKey'),
+      // "User-Agent":navigator.userAgent,
       "NETWORKSTATE":"wifi",
       "User-Platform":"web",
       "Market":"default",
@@ -184,8 +215,8 @@ const login=(data)=>{
     method:'post',
     headers:{
       "Content-Type":"application/json",
-      "ED-UUID":ED_UUID,
-      "User-Agent":navigator.userAgent,
+      "ED-UUID":getCookie('publicKey'),
+      // "User-Agent":navigator.userAgent,
       "NETWORKSTATE":"wifi",
       "User-Platform":"web",
       "Market":"default",
@@ -216,5 +247,7 @@ export{
   getAddress,
   createOrder,
   initiatePay,
-  getPublicKey
+  getPublicKey,
+  getInviterInfo,
+  getBarrageList
 }

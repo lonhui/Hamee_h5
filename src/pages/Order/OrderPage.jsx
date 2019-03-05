@@ -150,7 +150,7 @@ class OrderPage extends Component {
       <Spin spinning={this.state.loading} tip="Loading...">
       <div className="OrderPage">
          <div className="Inviter">
-            <p className="InviterName">Inviter: {this.state.fromInfo.nickName==null?"xxxxxxxx":this.state.fromInfo.nickName} </p>
+            <p className="InviterName">Inviter: {this.state.fromInfo.nickName==null?"Hamee":this.state.fromInfo.nickName} </p>
             <p className="InviterID">ID: {this.state.fromInfo.id==null?"xxxxxxxxxxxx":this.state.fromInfo.id}</p>
          </div>
          <div className="DeliveryInfo">
