@@ -118,6 +118,11 @@ const routers = [
         path:'/NewcomerSpecialTraining',
         component:loadable("/HameeBusinessSchool/NewcomerSpecialTraining")
     },
+    {
+        //新会员用户手册
+        path:'/NewVipHandbook',
+        component:loadable("/HameeBusinessSchool/NewVipHandbook")
+    },
     // 发送给客服的商品详情
     {
         path:'/Details',
