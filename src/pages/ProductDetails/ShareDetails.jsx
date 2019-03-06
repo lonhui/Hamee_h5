@@ -219,7 +219,7 @@ class ShareDetails extends Component {
                 <div className="footer">
                     <a href="https://play.google.com/store/apps/details?id=com.hamee">
                         <div className="pay_Button" onClick={this.showDrawer} >
-                            <p>Go download</p>
+                            <p>Download Aplikasi</p>
                         </div>
                     </a>
                 </div>

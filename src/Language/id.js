@@ -4,7 +4,7 @@ const Invite={
     BUY_BETTER:"Belanja Lebih",
     GOODS:"Banyak",
     Member_Benefits:"Keuntungan Menjadi Member ",
-    off_shopping_full_of_goods:"diskon untuk member sebesar 99%",
+    off_shopping_full_of_goods:"Diskon untuk member hingga 5 - 30%",
     Member_spree_shopping_coupon_300K:"diskon member sebesar 20% untuk semua produk",
     B_A_M_O_V_E_H_O_S_W_S:"Yuk Jadi Member! Bisnis Tanpa Modal! Tanpa Repot Stok!",
     O_V_G_C_S_O_A_S_S_W:"Customer Service Kami Siap Membantu Anda ",

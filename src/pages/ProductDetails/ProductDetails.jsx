@@ -3,7 +3,7 @@ import './ProductDetails.css'
 import { Row, Col, Drawer, Radio, message,Button,Spin,Carousel  } from 'antd';
 import {getCookie, setCookie} from "../../util/Cookie"
 import {getProductDetails,priceCalculation,getInviterInfo} from "../../api/index"
-import {PublicKey} from "../../util/encryption"
+import InviterUps from '../../components/PopUps/InviterUps'
 
 const height = document.documentElement.clientHeight
 const RadioGroup = Radio.Group;
@@ -14,6 +14,7 @@ class ProductDetails extends Component {
         this.state={
             loading:true,
             visible:false,
+            visibleUp:false,
             fromInfo:{},
             image:'',
             images:[],
@@ -267,11 +268,19 @@ class ProductDetails extends Component {
                             <Col span={14}></Col>
                         </Row>
                     </div>
-                    <div className="define_Button" onClick={this.pay}>
+                    <div className="define_Button" onClick={()=>{
+                        this.setState({visible:false,visibleUp:true})
+                    }}>
                         <p>Beli</p>
                     </div>
                 </Drawer>
             </div>
+            <InviterUps visible={this.state.visibleUp} 
+            closeModal={()=>{this.setState({visibleUp:false})}}
+            determine={()=>{
+                this.setState({visibleUp:false})
+                this.pay()
+            }}/>
         </Spin>
     );
   }

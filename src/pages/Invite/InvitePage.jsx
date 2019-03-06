@@ -248,10 +248,10 @@ class InvitePage extends Component {
   }
   getname=()=>{
     let a = Number(this.state.nameIndex)
-    if(a>120){
+    if(a>120 && a>this.state.userNames.length-10){
       this.getBarrageList()
     }
-    console.log(a)
+    console.log(a,this.state.userNames.length-10)
     this.setState({nameIndex:++this.state.nameIndex})
     let name = this.state.userNames[a]
     return name

@@ -3,6 +3,7 @@ import { Row, Col, message, Spin} from 'antd';
 import {getSMS,signUp} from '../../api/index.js';
 import {setCookie, getCookie} from '../../util/Cookie'
 import "./SignUpPage.css"
+import InviterUps from '../../components/PopUps/InviterUps'
 
 var height = window.screen.height;
 
@@ -20,6 +21,7 @@ class SignUpPage extends Component {
             timeCount:0,
             countyCode:'62',//国家码
             loading:false,
+            visible:false,
             // 用户输入参数
             phone:'',
             password:'',
@@ -60,19 +62,8 @@ class SignUpPage extends Component {
             message.error("please enter a valid phone number!")
         }
     }
-    
-    // 下一步
-    nextButton=()=>{
-        if(this.state.phone.length<1){
-            message.error('Phone number cannot be empty!');
-        }else if(this.state.password.length<1){
-            message.error('password can not be blank!');
-        }else if(this.state.code.length<1){
-            message.error('verification code must be filled!');
-        }else if(!this.state.RuleAgreedStatus){
-            message.warning('Please agree and tick the User Agreement!');
-        }else{
-            this.setState({loading:true})
+    signUp=()=>{
+        this.setState({loading:true})
             let data={
                 mobile:this.state.countyCode+this.state.phone,
                 referrerId:getCookie("InviterId"),
@@ -95,8 +86,23 @@ class SignUpPage extends Component {
                 console.log(error)
                 this.setState({loading:false})
             })
+    }
+    // 下一步
+    nextButton=()=>{
+        if(this.state.phone.length<1){
+            message.error('Phone number cannot be empty!');
+        }else if(this.state.password.length<1){
+            message.error('password can not be blank!');
+        }else if(this.state.code.length<1){
+            message.error('verification code must be filled!');
+        }else if(!this.state.RuleAgreedStatus){
+            message.warning('Please agree and tick the User Agreement!');
+        }else{
+            this.openModal()
         }
     }
+
+    openModal=()=>{this.setState({visible:true})}
     onChangePhone=(event)=>{this.setState({phone:event.target.value})}// 手机号输入
     onChangePassword=(event)=>{this.setState({password:event.target.value})}//密码输入
     onChangeCode=(event)=>{this.setState({code:event.target.value})}//验证码输入
@@ -105,15 +111,15 @@ class SignUpPage extends Component {
     return (
         <Spin spinning={this.state.loading} tip="Loading...">
         <div className="signUp" style={{height:height}}>
-            <div className="title">
-                <span className="log">Daftar baru</span>
+            <div className="signUp_title">
+                <span className="signUp_log" onClick={this.openModal}>Daftar baru</span>
             </div>
             {/* 账号 */}
-            <div className="userName">
-                <img src={require("../../images/login_icon_phone@2x.png")} alt=""/>
+            <div className="signUp_userName">
+                <img className="login_icon_phone" src={require("../../images/login_icon_phone@2x.png")} alt=""/>
                 <span>Nomor telefon</span>
                 <Row style={{color:'#fff',border:"1px #fff solid",borderRadius:12,marginTop:10}}>
-                    <Col span={4} className="AreaCode">
+                    <Col span={4} className="signUp_AreaCode">
                         <img src={require("../../images/login_icon_down@2x.png")} alt=""/>
                         <span>+62</span>
                     </Col>
@@ -123,10 +129,10 @@ class SignUpPage extends Component {
                 </Row>
             </div>
             {/* 密码 */}
-            <div className="password">
+            <div className="signUp_password">
                 <img src={require("../../images/login_icon_password@2x.png")} />
                 <span>sandi</span>
-                <Row className="password_input">
+                <Row className="signUp_password_input">
                     <Col span={21}>
                         <input type={this.state.eyeStatus?"text":"password"} placeholder="Masukkan nomor password anda" value={this.state.password} onChange={this.onChangePassword}/>
                     </Col>
@@ -140,16 +146,16 @@ class SignUpPage extends Component {
                 </Row>
             </div>
             {/* 验证码 */}
-            <div className="vfcode">
+            <div className="signUp_vfcode">
                 <img src={require("../../images/login_icon_verification@2x.png")} />
                 <span>Kode verifikasi</span>
-                <Row className="vfcode_input">
+                <Row className="signUp_vfcode_input">
                     <Col span={16} style={{color:'#fff'}}><input type="text" placeholder="Please enter" value={this.state.code} onChange={this.onChangeCode}/></Col>
                     <Col span={1}></Col>
-                    <Col span={7}><div className="vfButton" onClick={this.getVFCode}>{this.state.getVFCodeStatus?this.state.timeCount+" s":"Verifikasi"}</div></Col>
+                    <Col span={7}><div className="signUp_vfButton" onClick={this.getVFCode}>{this.state.getVFCodeStatus?this.state.timeCount+" s":"Verifikasi"}</div></Col>
                 </Row>
             </div>
-            <div className="selectRule">
+            <div className="signUp_selectRule">
                 <img src={this.state.RuleAgreedStatus?agree:NoAgree} onClick={()=>{
                     this.setState({RuleAgreedStatus:!this.state.RuleAgreedStatus})
                 }}/>
@@ -157,10 +163,16 @@ class SignUpPage extends Component {
                     this.props.history.push('/UserAgreement')
                 }}>Saya setuju dengan ketentuan & kondisi</span>
             </div>
-            <div className="nextButton" onClick={this.nextButton}>
+            <div className="signUp_nextButton" onClick={this.nextButton}>
                 <span>Next</span>
             </div>
         </div>
+        <InviterUps visible={this.state.visible} 
+            closeModal={()=>{this.setState({visible:false})}}
+            determine={()=>{
+                this.setState({visible:false})
+                this.signUp()
+            }}/>
       </Spin>
     );
   }
