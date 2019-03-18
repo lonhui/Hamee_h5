@@ -78,7 +78,21 @@ class SignUpPage extends Component {
                     message.success('registration success!')
                     setCookie('uid',res.data.id,1)
                     setCookie('token',res.data.token,1)
-                    this.props.history.push('/OrderPage')
+                    let enterType = Number(getCookie("enterType"))
+                    let isSelect = getCookie("isSelect")
+                    if(enterType===0){
+                        if(isSelect){
+                            this.props.history.push('/OrderPage')
+                        }else{
+                            this.props.history.push('/ProductDetails')
+                        }
+                    }else if(enterType===1){
+                        if(isSelect){
+                            this.props.history.push('/OrderPage')
+                        }else{
+                            this.props.history.push('/ShareDetails')
+                        }
+                    }
                 }else{
                     this.setState({loading:false})
                 }

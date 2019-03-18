@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './ProductDetails.css'
 import { Row, Col, Drawer, Radio, message,Button,Spin,Carousel  } from 'antd';
 import {getCookie, setCookie} from "../../util/Cookie"
-import {getProductDetails,priceCalculation,getInviterInfo} from "../../api/index"
+import {getProductDetails,priceCalculation,getInviterInfo,getUserInfo} from "../../api/index"
 import {PublicKey} from "../../util/encryption"
 
 const height = document.documentElement.clientHeight
@@ -30,20 +30,65 @@ class ShareDetails extends Component {
         }
     }
     componentDidMount(){
+        setCookie("enterType",1,1)//在cookie中标记用户的进入类型，0首页会员礼包进入，1商品分享进入
         const publicKey = PublicKey()
         const url = window.location.href
         let productIdArr = url.match(/[^a-zA-Z0-9]id{1,2}=([0-9\-]+)/)
+        let InviterIdArr = url.match(/[^a-zA-Z0-9]InviterId{1,9}=([0-9\-]+)/)
         if(productIdArr){
             if(productIdArr.length>1){
                 let productId = productIdArr[1]
                 setCookie('selectedProductId',productId,1)
                 this.getDetails(productId)
+                this.getInviterId(InviterIdArr)
+            }else{
+                if(getCookie('selectedProductId')){
+                    this.getDetails(getCookie('selectedProductId'))
+                    if(getCookie('InviterId')===null){this.getInviterId(InviterIdArr)}
+                }else{
+                    this.props.history.push({pathname: `/`})
+                }
+            }
+        }else{
+            if(getCookie('selectedProductId')){
+                this.getDetails(getCookie('selectedProductId'))
+                if(getCookie('InviterId')===null){this.getInviterId(InviterIdArr)}
             }else{
                 this.props.history.push({pathname: `/`})
             }
-        }else{
-            this.props.history.push({pathname: `/`})
         }
+    }
+    // 获取InviterId
+    getInviterId=(InviterIdArr)=>{
+        let uid = getCookie("uid")
+        if(InviterIdArr){
+            if(InviterIdArr.length>1){
+                let InviterId = InviterIdArr[1]
+                setCookie('InviterId',InviterId,1)
+            }else{
+                if(uid){this.getUserInfo(uid)}
+            }
+        }else{
+            if(uid){this.getUserInfo(uid)}
+        }
+    }
+    // 获取用户信息
+    getUserInfo=(uid)=>{
+        let data={
+            uid:uid
+        }
+        getUserInfo(data).then((res)=>{
+            console.log(res)
+            if(res.code===0){
+              this.setState({
+                InviterId:res.data.refUid
+              })
+              setCookie('InviterId',res.data.refUid,1)
+              this.getInviterInfo(res.data.refUid)
+            }
+          }).catch((error)=>{
+            console.log(error)
+          })
     }
     // 获取商品详情
     getDetails=(id)=>{
@@ -52,7 +97,7 @@ class ShareDetails extends Component {
             if(res.code===0){
                 for(let i=0;i<res.data.variants.length;i++){
                     for(let j=0;j<res.data.images.length;j++){
-                        if(res.data.variants[i].image_id==res.data.images[j].id){
+                        if(res.data.variants[i].image_id===res.data.images[j].id){
                             res.data.variants[i].imageUrl=res.data.images[j].src
                         }
                     }
@@ -93,15 +138,7 @@ class ShareDetails extends Component {
             message.warning("Please select at least one item!")
         }
     }
-    getUserInfo=(uid)=>{
-        console.log(uid)
-        getInviterInfo({uid:uid}).then((res)=>{
-            console.log(res)
-            if(res.code==0){
-                return res.data.level
-            }
-        })
-    }
+    
     // 价格预计算
     priceCalculation(){
         let data={
@@ -124,7 +161,7 @@ class ShareDetails extends Component {
                 product_id:this.state.data.id,
                 variant_id:this.state.selectID,
             }
-            if(res.code==0){
+            if(res.code===0){
                 res.data.ProductInfo=ProductInfo
                 // 订单预计算数据转为字符串存入Storage
                 let testjson = JSON.stringify(res.data)
@@ -137,20 +174,23 @@ class ShareDetails extends Component {
     }
     // 开启弹窗
     showDrawer = () => {
-
         // 判断链接是否携带邀请人id
-        // this.setState({
-        //     visible: true,
-        //     DrawerImage:this.state.variants[0].imageUrl,
-        //     DrawerPrice:this.state.variants[0].price,
-        // });
+        if(getCookie("uid")){
+            this.setState({
+                visible: true,
+                DrawerImage:this.state.variants[0].imageUrl,
+                DrawerPrice:this.state.variants[0].price,
+            });
+        }else{
+            this.props.history.push({pathname: `/Login`})
+        }
     };
     // 关闭弹窗
     onClose = () => {this.setState({visible: false,});};
     // 选择规格
     selectOnChange=(e)=>{
         this.state.variants.forEach((item)=>{
-            if(item.id==e.target.value){
+            if(item.id===e.target.value){
                 this.setState({
                     DrawerImage:item.imageUrl,
                     DrawerPrice:item.price,
@@ -198,32 +238,19 @@ class ShareDetails extends Component {
                         <Col span={12} className="SalesCount">{this.state.data.buy_number} orang telah membeli</Col>
                     </Row>
                 </div>
-                {
-                    this.state.fromInfo.id==null||this.state.fromInfo.id==''?null:(
-                        <div className="user">
-                            <Row>
-                                <Col span={6} className="userImg">
-                                    <img src={fromImg} alt=""/> 
-                                </Col>
-                                <Col span={18} className="suerText">
-                                    <p className="user_Name">{this.state.fromInfo.nickName==null?"xxxxxxxx":this.state.fromInfo.nickName}</p>
-                                    <p className="userInviteText">Jemput anda membeli bersama! </p>
-                                </Col>
-                            </Row>
-                        </div>
-                    )
-                }
+               
                 <div className="Info">
                     <div dangerouslySetInnerHTML={{__html: this.state.data.body_html}}/>
                 </div>
                 <div className="footer">
-                    <a href="https://play.google.com/store/apps/details?id=com.hamee">
+                    {/* <a href="https://play.google.com/store/apps/details?id=com.hamee"> */}
                         <div className="pay_Button" onClick={this.showDrawer} >
-                            <p>Download Aplikasi</p>
+                            <p>Beli Sekarangi</p>
                         </div>
-                    </a>
+                    {/* </a> */}
                 </div>
-                {/* <Drawer placement="bottom" height={450} closable={false} onClose={this.onClose} visible={this.state.visible} className="Drawer">
+                {/* 购买弹框 */}
+                <Drawer placement="bottom" height={450} closable={false} onClose={this.onClose} visible={this.state.visible} className="Drawer">
                     <img className="endImg" src={require("../../images/home_icon_close@2x.png")} onClick={this.onClose} alt=""/>
                     <div className="DrawerBox">
                         <Row>
@@ -253,7 +280,7 @@ class ShareDetails extends Component {
                     <div className="define_Button" onClick={this.pay}>
                         <p>Beli</p>
                     </div>
-                </Drawer> */}
+                </Drawer>
             </div>
         </Spin>
     );

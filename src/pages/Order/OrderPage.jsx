@@ -16,6 +16,7 @@ class OrderPage extends Component {
           ProductInfo:{},
           addressInfo:null
         },
+        enterType:getCookie('enterType')
     }
   }
   componentDidMount(){
@@ -46,19 +47,39 @@ class OrderPage extends Component {
     if(this.state.address!=null){
       this.setState({loading:true})
       let uid=getCookie('uid')
-      let data = {
-        addressId:this.state.address.id,
-        uid:uid,
-        discountId:0,
-        fromUid:getCookie("InviterId"),
-        variants:[
-          {
-            product_id:this.state.data.ProductInfo.product_id,
-            variant_id:this.state.data.ProductInfo.variant_id,
-            quantity:this.state.data.ProductInfo.count,
-          }
-        ]
+      let data = null
+      if(Number(getCookie('enterType'))===0){
+        data= {
+          addressId:this.state.address.id,
+          uid:uid,
+          discountId:0,
+          fromUid:getCookie("InviterId"),
+          variants:[
+            {
+              product_id:this.state.data.ProductInfo.product_id,
+              variant_id:this.state.data.ProductInfo.variant_id,
+              quantity:this.state.data.ProductInfo.count,
+            }
+          ]
+        }
+      }else if(Number(getCookie('enterType'))===1){
+        data={
+          addressId:this.state.address.id,
+          uid:uid,
+          inviteUid:getCookie("InviterId"),
+          coupon:0,
+          variants:[
+            {
+              product_id:this.state.data.ProductInfo.product_id,
+              variant_id:this.state.data.ProductInfo.variant_id,
+              quantity:this.state.data.ProductInfo.count,
+            }
+          ],
+          note:null,
+        }
       }
+      console.log("data")
+      console.log(data)
       createOrder(data).then((res)=>{
         console.log(res)
         if(res.code==0){
@@ -149,10 +170,14 @@ class OrderPage extends Component {
     return (
       <Spin spinning={this.state.loading} tip="Loading...">
       <div className="OrderPage">
-         <div className="Inviter">
-            <p className="InviterName">Inviter: {this.state.fromInfo.nickName==null?"Hamee":this.state.fromInfo.nickName} </p>
-            <p className="InviterID">ID: {this.state.fromInfo.id==null?"xxxxxxxxxxxx":this.state.fromInfo.id}</p>
-         </div>
+          {
+            this.state.enterType==0?(
+              <div className="Inviter">
+                  <p className="InviterName">Inviter: {this.state.fromInfo.nickName==null?"Hamee":this.state.fromInfo.nickName} </p>
+                  <p className="InviterID">ID: {this.state.fromInfo.id==null?"xxxxxxxxxxxx":this.state.fromInfo.id}</p>
+              </div>
+            ):<div style={{height:10}}></div> 
+          }
          <div className="DeliveryInfo">
            <p className="DeliveryInfo_title">Maklumat penghantaran</p>
            {

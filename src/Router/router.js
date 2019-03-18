@@ -123,6 +123,11 @@ const routers = [
         path:'/NewVipHandbook',
         component:loadable("/HameeBusinessSchool/NewVipHandbook")
     },
+    {
+        //Hamee 等级晋升制度
+        path:'/VipDesc',
+        component:loadable("/HameeBusinessSchool/MemberDescription")
+    },
     // 发送给客服的商品详情
     {
         path:'/Details',

@@ -52,6 +52,7 @@ class InvitePage extends Component {
     }
   }
   componentDidMount(){
+    setCookie("enterType",0,1)//在cookie中标记用户的进入类型，0首页会员礼包进入，1商品分享进入
     // 判断用户是否是会员
     if(this.state.userType!=0){
       this.setState({
@@ -209,6 +210,7 @@ class InvitePage extends Component {
     if(this.state.userType>0){
       message.warning(Invite.You_are_already_a_member_of_our_Hame)
     }else{
+      setCookie('isSelect',true,1)
       this.props.history.push({pathname: `/ProductDetails`, state: {id:id}})
     }
   }
@@ -346,7 +348,6 @@ class InvitePage extends Component {
                     {Invite.share_it}
                       <ul className="ul_bottom">
                         <li>{Invite.Member_shopping_membership_price}</li>
-                        {/* <li></li> */}
                       </ul>
                   </li>
                 </ul>
