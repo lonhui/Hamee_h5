@@ -3,7 +3,7 @@ body {
 	height: 100vh;
 	align-items: center;
 	justify-content: center;
-	/* background-color: black; */
+	background-color: #0a0230;
 }
 
 .loader {
@@ -16,9 +16,9 @@ body {
     justify-content: center;
 	margin:100px auto;
 }
-
-p{
-    /* color: #fff; */
+/* .loader */
+.loader p{
+    color: #fff;
     font-size: 16px;
     font-weight: 600;
 }
