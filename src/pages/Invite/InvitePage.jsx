@@ -197,8 +197,10 @@ class InvitePage extends Component {
       })
     })
   }
+
   OneClickOpening=()=>{
     if(this.state.userType>0){
+      // 分享
       window.postMessage("Share")
     }else{
       const GiftPackages_height = document.getElementById("GiftPackages").offsetTop;
@@ -277,11 +279,11 @@ class InvitePage extends Component {
                 <div style={{height:70}}></div>
                 {/* 头部文字 */}
                 <div className='Invite_title'>
-                    <p>{Invite.SPEND_LESS}</p>
-                    <p className="fontBig">{Invite.MONEY}</p>
-                    <p>{Invite.BUY_BETTER}</p>
-                    <p className="fontBig">{Invite.GOODS}</p>
-                    <p className="year">——— 2019 ———</p>
+                  <p>{Invite.SPEND_LESS}</p>
+                  <p className="fontBig">{Invite.MONEY}</p>
+                  <p>{Invite.BUY_BETTER}</p>
+                  <p className="fontBig">{Invite.GOODS}</p>
+                  <p className="year">——— 2019 ———</p>
                 </div>
           </div>
           {/* 会员福利 */}
@@ -364,7 +366,7 @@ class InvitePage extends Component {
           </div>
           {/* 滚动通知 */}
           {
-            this.state.userNames.length>0?(
+            this.state.userNames.length>1?(
               <div style={{height:26,backgroundColor:this.state.backColor,borderRadius:15,position:'absolute',top:this.state.MoveUp,left:10,paddingRight:8}}>
                 <img style={{height:26,width:26,position:'relative',bottom:1,opacity:this.state.transparency,marginRight:5}} src={require("../../images/home_img_avatar@2x.png")} alt=""/>
                 <span style={{color:this.state.textColor,fontSize:12,lineHeight:'25px'}}>User {this.state.testName} telah menjadi Member...</span>

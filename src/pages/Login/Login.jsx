@@ -111,6 +111,7 @@ class Login extends Component {
     onChangePassword=(event)=>{this.setState({password:event.target.value})}//密码输入
 
   render() {
+    
     return (
         <Spin spinning={this.state.loading} tip="Loading...">
             <div className="Login" style={{height:height}}>

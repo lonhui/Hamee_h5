@@ -1,27 +1,10 @@
 import Loadable from 'react-loadable';
 // 邀请购买礼包流程页面
 
-// import InvitePage from '../pages/Invite/InvitePage';
-// import Login from '../pages/Login/Login';
-// import SignUp from '../pages/SignUp/SignUpPage';
 import OrderPage from '../pages/Order/OrderPage';
-// import addAreaPage from '../pages/addArea/addAreaPage';
 import ProductList from '../pages/ProductList/ProductList';
-// import GoDownloadPage from '../pages/GoDownload/GoDownloadPage';
 import ProductDetails from '../pages/ProductDetails/ProductDetails';
-//条约页面
-// import UserAgreement from '../pages/UserAgreement/UserAgreement';
-//提现分享
-// import WithdrawShare from '../pages/WithdrawShare/WithdrawShare';
-//商学院页面
-// import NewcomerStrategy from '../pages/HameeBusinessSchool/NewcomerStrategy';
-// import CommunicationSkills from '../pages/HameeBusinessSchool/CommunicationSkills';
-// import FindCustomer from '../pages/HameeBusinessSchool/FindCustomer';
-// import HairCircleTechnique from '../pages/HameeBusinessSchool/HairCircleTechnique';
-// import PowderAbsorption from '../pages/HameeBusinessSchool/PowderAbsorption';
-// import NewcomerSpecialTraining from '../pages/HameeBusinessSchool/NewcomerSpecialTraining';
-//发送给客服的商品详情
-// import Details from '../pages/Detail/Details'
+
 
 const loadable = (filename) => Loadable({
     loader:() => import("../pages"+filename),
