@@ -17,6 +17,8 @@ const encryption=()=>{
     }
     requestHeader['NETWORKSTATE'] = "wifi";
     encryptHeader['NETWORKSTATE'] = "wifi";
+
+    encryptHeader['t'] = "web";
     
     requestHeader['User-Platform'] = "web";
     encryptHeader['User-Platform'] = "web";

@@ -238,6 +238,22 @@ class ShareDetails extends Component {
                         <Col span={12} className="SalesCount">{this.state.data.buy_number} orang telah membeli</Col>
                     </Row>
                 </div>
+
+                {/* {
+                    this.state.fromInfo.id==null||this.state.fromInfo.id==''?null:(
+                        <div className="user">
+                            <Row>
+                                <Col span={6} className="userImg">
+                                    <img src={fromImg} alt=""/> 
+                                </Col>
+                                <Col span={18} className="suerText">
+                                    <p className="user_Name">{this.state.fromInfo.nickName==null?"Hamee":this.state.fromInfo.nickName}</p>
+                                    <p className="userInviteText">Mengajak anda untuk bergabung! </p>
+                                </Col>
+                            </Row>
+                        </div>
+                    )
+                } */}
                
                 <div className="Info">
                     <div dangerouslySetInnerHTML={{__html: this.state.data.body_html}}/>

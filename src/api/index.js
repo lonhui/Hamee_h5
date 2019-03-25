@@ -1,7 +1,20 @@
 import request from '../util/request.js';
-import {getCookie} from '../util/Cookie'
+import {getCookie} from '../util/Cookie';
+import {encryption} from '../util/encryption'
 
 // const ED_UUID = getCookie('publicKey')
+
+const encryptionPW=(data)=>{
+  if(data.passwd){
+    let jsonData={
+      timestamp:(new Date()).getTime(),
+      passwrd:data.passwd
+    }
+    let pwd = encryption(data.passwd,getCookie('publicKey'))
+    data.passwd = pwd
+  }
+  return data
+}
 
 // 获取弹幕
 const getBarrageList=()=>{
@@ -14,7 +27,8 @@ const getBarrageList=()=>{
       "User-Platform":"web",
       "Market":"default",
       "Accept-Language":navigator.language,
-      "n":"web"
+      "n":"web",
+      "t":'web'
     },
   })
 }
@@ -30,7 +44,8 @@ const getProducts=(params)=>{
       "User-Platform":"web",
       "Market":"default",
       "Accept-Language":navigator.language,
-      "n":"web"
+      "n":"web",
+      "t":'web'
     },
     params
   })
@@ -46,7 +61,8 @@ const getProductDetails=(id)=>{
       "User-Platform":"web",
       "Market":"default",
       "Accept-Language":navigator.language,
-      "n":"web"
+      "n":"web",
+      "t":'web'
     },
     method: 'get',
   })
@@ -64,7 +80,8 @@ const addArea=(data)=>{
       "User-Platform":"web",
       "Market":"default",
       "Accept-Language":navigator.language,
-      "n":"web"
+      "n":"web",
+      "t":'web'
     },
     data
   })
@@ -80,7 +97,8 @@ const getUserInfo=(params)=>{
       "User-Platform":"web",
       "Market":"default",
       "Accept-Language":navigator.language,
-      "n":"web"
+      "n":"web",
+      "t":'web'
     },
     params
   })
@@ -96,7 +114,8 @@ const getInviterInfo=(params)=>{
       "User-Platform":"web",
       "Market":"default",
       "Accept-Language":navigator.language,
-      "n":"web"
+      "n":"web",
+      "t":'web'
     },
     params
   })
@@ -112,7 +131,8 @@ const getAddress=(params)=>{
       "User-Platform":"web",
       "Market":"default",
       "Accept-Language":navigator.language,
-      "n":"web"
+      "n":"web",
+      "t":'web'
     },
     method:'post',
     params
@@ -130,7 +150,8 @@ const createOrder=(data)=>{
       "User-Platform":"web",
       "Market":"default",
       "Accept-Language":navigator.language,
-      "n":"web"
+      "n":"web",
+      "t":'web'
     },
     data
   })
@@ -147,7 +168,8 @@ const initiatePay=(data)=>{
       "User-Platform":"web",
       "Market":"default",
       "Accept-Language":navigator.language,
-      "n":"web"
+      "n":"web",
+      "t":'web'
     },
     data
   })
@@ -165,7 +187,8 @@ const priceCalculation=(data)=>{
       "User-Platform":"web",
       "Market":"default",
       "Accept-Language":navigator.language,
-      "n":"web"
+      "n":"web",
+      "t":'web'
     },
     data
   })
@@ -183,7 +206,8 @@ const getSMS=(params)=>{
       "User-Platform":"web",
       "Market":"default",
       "Accept-Language":navigator.language,
-      "n":"web"
+      "n":"web",
+      "t":'web'
     },
     params
   })
@@ -202,7 +226,8 @@ const signUp=(data)=>{
       "User-Platform":"web",
       "Market":"default",
       "Accept-Language":navigator.language,
-      "n":"web"
+      "n":"web",
+      "t":'web'
     },
     data
   })
@@ -210,6 +235,7 @@ const signUp=(data)=>{
 
 // 手机登录
 const login=(data)=>{
+  // data = encryptionPW(data)
   return request({
     url:'/user/login',
     method:'post',
@@ -221,9 +247,27 @@ const login=(data)=>{
       "User-Platform":"web",
       "Market":"default",
       "Accept-Language":navigator.language,
-      "n":"web"
+      "n":"web",
+      "t":'web'
     },
     data
+  })
+}
+// 获取邀请人信息
+const getReferrerInfo=(params)=>{
+  return request({
+    url:'/user/getReferrerInfo',
+    method:'get',
+    headers:{
+      "ED-UUID":getCookie('publicKey'),
+      "NETWORKSTATE":"wifi",
+      "User-Platform":"web",
+      "Market":"default",
+      "Accept-Language":navigator.language,
+      "n":"web",
+      "t":'web'
+    },
+    params
   })
 }
 
@@ -249,5 +293,6 @@ export{
   initiatePay,
   getPublicKey,
   getInviterInfo,
-  getBarrageList
+  getBarrageList,
+  getReferrerInfo
 }

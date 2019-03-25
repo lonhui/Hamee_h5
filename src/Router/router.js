@@ -116,6 +116,10 @@ const routers = [
         path:'/Details',
         component:loadable("/Detail/Details")
     },
+    {
+        path:'/BCAPay',
+        component:loadable("/BCAPay/BCAPay")
+    },
 ];
 
 export {routers}
