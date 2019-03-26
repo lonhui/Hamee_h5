@@ -77,7 +77,6 @@ class Login extends Component {
           InviterId:res.data.refUid
         })
         setCookie('InviterId',res.data.refUid,1)
-        this.getInviterInfo(res.data.refUid)
       }else{
         this.setState({loading:false})
       }
@@ -87,25 +86,6 @@ class Login extends Component {
     })
   }
 
-  // 获取邀请人信息
-  getInviterInfo=(InviterId)=>{
-    let data={
-      uid:parseInt(InviterId)
-    }
-    getInviterInfo(data).then((res)=>{
-      console.log(res)
-      if(res.code==0){
-        this.setState({fromInfo:res.data.data})
-        let fromInfoStr = JSON.stringify(res.data.data)
-        setCookie("fromInfoStr",fromInfoStr,1)
-        this.props.history.goBack()
-      }
-      this.setState({loading:false})
-    }).catch((error)=>{
-      console.log(error)
-      this.setState({loading:false})
-    })
-  }
     
     onChangePhone=(event)=>{this.setState({phone:event.target.value})}// 手机号输入
     onChangePassword=(event)=>{this.setState({password:event.target.value})}//密码输入

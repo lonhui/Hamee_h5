@@ -5,7 +5,6 @@ import copy from 'copy-to-clipboard';
 import { message } from 'antd';
 
 
-var height = window.document.body.offsetHeight
 class InviterUps extends Component {
   constructor(props){
     super(props);
@@ -31,8 +30,8 @@ class InviterUps extends Component {
   render() {
       return(
         this.props.visible?(
-          <div style={{height:height,width:'100%',position:'absolute',top:0,backgroundColor:'rgba(0,0,0,0.4)'}}>
-              <div className='UplineInfo' style={{marginTop:(height-294)/3}}>
+          <div style={{height:this.props.height,width:'100%',position:'absolute',top:0,backgroundColor:'rgba(0,0,0,0.4)'}}>
+              <div className='UplineInfo' style={{marginTop:(this.props.height-294)/3}}>
                 <p style={{textAlign:'center',color:"#fff",fontSize:22,paddingTop:10}}>Informasi Upline</p>
                 <div className="image">
                   <img src={require("../../images/login_img_avatar@2x.png")} alt=""/>

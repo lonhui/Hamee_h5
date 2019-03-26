@@ -254,7 +254,23 @@ const login=(data)=>{
   })
 }
 // 获取邀请人信息
-const getReferrerInfo=(params)=>{
+const getReferrerInfo=()=>{
+  return request({
+    url:'/user/getReferrerInfo',
+    method:'get',
+    headers:{
+      "ED-UUID":getCookie('publicKey'),
+      "NETWORKSTATE":"wifi",
+      "User-Platform":"web",
+      "Market":"default",
+      "Accept-Language":navigator.language,
+      "n":"web",
+      "t":'web'
+    }
+  })
+}
+
+const getReferrerInfoSetu=(params)=>{
   return request({
     url:'/user/getReferrerInfo',
     method:'get',
@@ -294,5 +310,6 @@ export{
   getPublicKey,
   getInviterInfo,
   getBarrageList,
-  getReferrerInfo
+  getReferrerInfo,
+  getReferrerInfoSetu
 }

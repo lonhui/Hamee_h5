@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './ProductDetails.css'
 import { Row, Col, Drawer, Radio, message,Button,Spin,Carousel  } from 'antd';
 import {getCookie, setCookie} from "../../util/Cookie"
-import {getProductDetails,priceCalculation,getInviterInfo,getUserInfo} from "../../api/index"
+import {getProductDetails,priceCalculation,getInviterInfo,getReferrerInfoSetu,getUserInfo,getReferrerInfo} from "../../api/index"
 import {PublicKey} from "../../util/encryption"
 
 const height = document.documentElement.clientHeight
@@ -65,31 +65,67 @@ class ShareDetails extends Component {
             if(InviterIdArr.length>1){
                 let InviterId = InviterIdArr[1]
                 setCookie('InviterId',InviterId,1)
+                this.getInviterInfo(InviterId)
             }else{
-                if(uid){this.getUserInfo(uid)}
+                this.getUserInfo(uid)
             }
         }else{
-            if(uid){this.getUserInfo(uid)}
+            this.getUserInfo(uid)
         }
     }
+    // 获取邀请人信息 无id
+  getUserInfo=()=>{
+    setTimeout(()=>{
+      getReferrerInfo().then((res)=>{
+        console.log(res)
+        if(res.code==0){
+          this.setState({fromInfo:res.data})
+          let fromInfoStr = JSON.stringify(res.data)
+          setCookie("fromInfoStr",fromInfoStr,1)
+          setCookie("InviterId",res.data.id,1)
+        }
+      }).catch((error)=>{
+        console.log(error)
+      })
+    },500)
+  }
+  // 获取邀请人信息 有id
+  getInviterInfo=(InviterId)=>{
+    let data={
+      uid:parseInt(InviterId)
+    }
+    setTimeout(()=>{
+      getReferrerInfoSetu(data).then((res)=>{
+        console.log(res.data)
+        if(res.code==0){
+          this.setState({fromInfo:res.data})
+          let fromInfoStr = JSON.stringify(res.data)
+          setCookie("fromInfoStr",fromInfoStr,1)
+          setCookie("InviterId",res.data.id,1)
+        }
+      }).catch((error)=>{
+        console.log(error)
+      })
+    },500)
+  }
     // 获取用户信息
-    getUserInfo=(uid)=>{
-        let data={
-            uid:uid
-        }
-        getUserInfo(data).then((res)=>{
-            console.log(res)
-            if(res.code===0){
-              this.setState({
-                InviterId:res.data.refUid
-              })
-              setCookie('InviterId',res.data.refUid,1)
-              this.getInviterInfo(res.data.refUid)
-            }
-          }).catch((error)=>{
-            console.log(error)
-          })
-    }
+    // getUserInfo=(uid)=>{
+    //     let data={
+    //         uid:uid
+    //     }
+    //     getUserInfo(data).then((res)=>{
+    //         console.log(res)
+    //         if(res.code===0){
+    //           this.setState({
+    //             InviterId:res.data.refUid
+    //           })
+    //           setCookie('InviterId',res.data.refUid,1)
+    //           this.getInviterInfo(res.data.refUid)
+    //         }
+    //       }).catch((error)=>{
+    //         console.log(error)
+    //       })
+    // }
     // 获取商品详情
     getDetails=(id)=>{
         getProductDetails(id).then((res)=>{
@@ -115,6 +151,7 @@ class ShareDetails extends Component {
     gotoProductDetails=(id)=>{
         this.props.history.push({pathname: `/ProductDetails`, state: {id:id}})
     }
+    
     // To pay按钮
     pay=()=>{
         if(this.state.selectID!=null&&this.state.count>0){
@@ -239,7 +276,7 @@ class ShareDetails extends Component {
                     </Row>
                 </div>
 
-                {/* {
+                {
                     this.state.fromInfo.id==null||this.state.fromInfo.id==''?null:(
                         <div className="user">
                             <Row>
@@ -253,7 +290,7 @@ class ShareDetails extends Component {
                             </Row>
                         </div>
                     )
-                } */}
+                }
                
                 <div className="Info">
                     <div dangerouslySetInnerHTML={{__html: this.state.data.body_html}}/>

@@ -104,13 +104,13 @@ class SignUpPage extends Component {
     // 下一步
     nextButton=()=>{
         if(this.state.phone.length<1){
-            message.error('Phone number cannot be empty!');
-        }else if(this.state.password.length<1){
-            message.error('password can not be blank!');
+            message.error('Nomor telepon tidak boleh kosong!');
+        }else if(this.state.password.length<8){
+            message.error('Panjang kata sandi harus lebih dari atau sama dengan 8 digit!');
         }else if(this.state.code.length<1){
-            message.error('verification code must be filled!');
+            message.error('kode verifikasi harus diisi!');
         }else if(!this.state.RuleAgreedStatus){
-            message.warning('Please agree and tick the User Agreement!');
+            message.warning('Harap setujui dan tandai Perjanjian Pengguna!');
         }else{
             this.openModal()
         }
@@ -182,6 +182,7 @@ class SignUpPage extends Component {
             </div>
         </div>
         <InviterUps visible={this.state.visible} 
+            height={height}
             closeModal={()=>{this.setState({visible:false})}}
             determine={()=>{
                 this.setState({visible:false})

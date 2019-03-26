@@ -276,6 +276,7 @@ class ProductDetails extends Component {
                 </Drawer>
             </div>
             <InviterUps visible={this.state.visibleUp} 
+            height={height}
             closeModal={()=>{this.setState({visibleUp:false})}}
             determine={()=>{
                 this.setState({visibleUp:false})

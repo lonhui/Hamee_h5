@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import { Row, Col,Spin,message } from 'antd';
-import {setCookie, getCookie,clearCookie} from '../../util/Cookie'
+import {setCookie, getCookie} from '../../util/Cookie'
 import "./InvitePage.css"
 import Product from "../../components/Product/Product"
-import {getProducts,getInviterInfo,getBarrageList,getUserInfo} from "../../api/index"
+import {getProducts,getBarrageList,getReferrerInfo,getReferrerInfoSetu} from "../../api/index"
 import {PublicKey} from '../../util/encryption'
 import {Invite} from '../../Language/id'
 
-import axios from 'axios'
 
 if(getCookie("publicKey")==null||getCookie("publicKey")==''){
   const publicKey = PublicKey()
@@ -63,14 +62,20 @@ class InvitePage extends Component {
     this.getProductList()
     this.getBarrageList()
     const url = window.location.href
-    let InviterIdArray = url.match(/[^a-zA-Z0-9]InviterId{1,9}=([0-9\-]+)/)
-    if(InviterIdArray){
-      this.getInviterId(InviterIdArray)
+    let InviterIdArray = url.match(/[^a-zA-Z0-9]InviterId{1,9}=([0-9\-]+)/)//获取地址栏邀请人id
+    console.log("InviterIdArray")
+    console.log(InviterIdArray)
+    if(InviterIdArray&&InviterIdArray!=null){
+      if(InviterIdArray.length>1){
+        let InviterId = InviterIdArray[1]
+        setCookie('InviterId',InviterId,1)
+        this.setState({InviterId:InviterId})
+        // 获取邀请人信息
+        this.getInviterInfo(InviterId)
+      }
     }else{
-      if(getCookie('uid')){
         // 获取用户上线
         this.getUserInfo()
-      }
     }
     
     this.ScrollAnimation()// 开始动画
@@ -100,49 +105,40 @@ class InvitePage extends Component {
       }
     }
   }
-  //获取url上携带的邀请人id
-  getInviterId=(InviterIdArray)=>{
-    if(InviterIdArray.length>1){
-      let InviterId = InviterIdArray[1]
-      setCookie('InviterId',InviterId,1)
-      this.setState({InviterId:InviterId})
-      // 获取邀请人信息
-      this.getInviterInfo(InviterId)
-    }
-  }
-  // 获取用户信息
+  // 获取邀请人信息 无id
   getUserInfo=()=>{
-    let data={
-      uid:getCookie('uid')
-    }
-    getUserInfo(data).then((res)=>{
-      console.log(res)
-      if(res.code==0){
-        this.setState({
-          InviterId:res.data.refUid
-        })
-        setCookie('InviterId',res.data.refUid,1)
-        this.getInviterInfo(res.data.refUid)
-      }
-    }).catch((error)=>{
-      console.log(error)
-    })
+    setTimeout(()=>{
+      getReferrerInfo().then((res)=>{
+        console.log(res)
+        if(res.code==0){
+          this.setState({fromInfo:res.data})
+          let fromInfoStr = JSON.stringify(res.data)
+          setCookie("fromInfoStr",fromInfoStr,1)
+          setCookie("InviterId",res.data.id,1)
+        }
+      }).catch((error)=>{
+        console.log(error)
+      })
+    },500)
   }
-  // 获取邀请人信息
+  // 获取邀请人信息 有id
   getInviterInfo=(InviterId)=>{
     let data={
       uid:parseInt(InviterId)
     }
-    getInviterInfo(data).then((res)=>{
-      console.log(res)
-      if(res.code==0){
-        this.setState({fromInfo:res.data.data})
-        let fromInfoStr = JSON.stringify(res.data.data)
-        setCookie("fromInfoStr",fromInfoStr,1)
-      }
-    }).catch((error)=>{
-      console.log(error)
-    })
+    setTimeout(()=>{
+      getReferrerInfoSetu(data).then((res)=>{
+        console.log(res.data)
+        if(res.code==0){
+          this.setState({fromInfo:res.data})
+          let fromInfoStr = JSON.stringify(res.data)
+          setCookie("fromInfoStr",fromInfoStr,1)
+          setCookie("InviterId",res.data.id,1)
+        }
+      }).catch((error)=>{
+        console.log(error)
+      })
+    },500)
   }
   //获取弹幕名单
   getBarrageList=()=>{
