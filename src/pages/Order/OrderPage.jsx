@@ -78,17 +78,13 @@ class OrderPage extends Component {
           note:null,
         }
       }
-      console.log("data")
-      console.log(data)
       createOrder(data).then((res)=>{
-        console.log(res)
         if(res.code==0){
           this.initiatePay(res.data.id)
         }else{
           this.setState({loading:false})
         }
       }).catch((error)=>{
-        console.log(error)
         this.setState({loading:false})
       })
     }else{
@@ -98,7 +94,6 @@ class OrderPage extends Component {
   // 发起支付
   initiatePay=(id)=>{
     initiatePay({orderID:id}).then((res)=>{
-      console.log(res)
       let that = this
       if(res.code==0){
         this.setState({loading:false})
@@ -113,7 +108,6 @@ class OrderPage extends Component {
         this.setState({loading:false})
       }
     }).catch((error)=>{
-      console.log(error)
       this.setState({loading:false})
     })
   }
@@ -122,7 +116,6 @@ class OrderPage extends Component {
   getaddress=()=>{
     let uid = getCookie('uid')
     getAddress({uid:uid}).then((res)=>{
-      console.log(res)
       if (res.code==0&&res.data.list){
         for(let i=0;i<res.data.list.length;i++){
             if(res.data.list[i].isDefault===1){

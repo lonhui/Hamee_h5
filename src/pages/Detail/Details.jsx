@@ -17,22 +17,16 @@ class Login extends Component {
     componentDidMount(){
         const url = window.location.href
         let InviterIdArray = url.match(/[^a-zA-Z0-9]productId{1,9}=([0-9\-]+)/)
-        if(InviterIdArray){
-            this.getProductId(InviterIdArray)
-        }else{
-            message.error("Link does not carry item id!")
-        }
+            if(InviterIdArray&&InviterIdArray.length>1){
+                let productId = InviterIdArray[1]
+                this.setState({productId:productId})
+                this.getProductInfo(productId)
+            }else{
+                message.error("Link does not carry item id!")
+            }
     }
-    getProductId=(InviterIdArray)=>{
-        if(InviterIdArray.length>1){
-            let productId = InviterIdArray[1]
-            this.setState({productId:productId})
-            this.getProductInfo(productId)
-        }
-    }
-    getProductInfo=()=>{
-        getProductDetails("2393243156559").then((res)=>{
-            console.log(res)
+    getProductInfo=(productId)=>{
+        getProductDetails(productId).then((res)=>{
             if(res.code==0){
                 for(let i=0;i < res.data.images.length;i++){
                     for(let j=0;j<res.data.variants.length;j++){

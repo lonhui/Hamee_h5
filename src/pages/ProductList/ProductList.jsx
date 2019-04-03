@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Row, Col,Spin } from 'antd';
+import { Spin } from 'antd';
 import "./ProductList.css"
 import Product from "../../components/Product/Product"
 import {getProducts} from "../../api/index"
@@ -18,7 +18,6 @@ class ProductList extends Component {
     }
     getProductList=()=>{
         getProducts().then((res)=>{
-          console.log(res)
           if(res.code==0){
             res.data.products.map((item)=>{
                 if(item.title.length>30){
@@ -38,15 +37,15 @@ class ProductList extends Component {
     render(){
         return(
             <Spin spinning={this.state.loading} tip="Loading...">
-            <div className="ProductsList">
-                <div className="dataList" >
-                    {
-                        this.state.data.map((item,index)=>{
-                            return<Product key={index} goto={this.gotoProductDetails} product={item} borderStatus={false}/>
-                        })
-                    }
+                <div className="ProductsList">
+                    <div className="dataList" >
+                        {
+                            this.state.data.map((item,index)=>{
+                                return<Product key={index} goto={this.gotoProductDetails} product={item} borderStatus={false}/>
+                            })
+                        }
+                    </div>
                 </div>
-            </div>
             </Spin>
         )
     }

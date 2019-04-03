@@ -42,7 +42,6 @@ class Login extends Component {
                     passwd:this.state.password
                 }
                 login(data).then((res)=>{
-                    console.log(res)
                     if(res.code===0){
                         setCookie('uid',res.data.id,1)
                         setCookie('token',res.data.token,1)
@@ -71,7 +70,6 @@ class Login extends Component {
       uid:getCookie('uid')
     }
     getUserInfo(data).then((res)=>{
-      console.log(res)
       if(res.code==0){
         this.setState({
           InviterId:res.data.refUid
@@ -82,7 +80,6 @@ class Login extends Component {
       }
     }).catch((error)=>{
         this.setState({loading:false})
-      console.log(error)
     })
   }
 

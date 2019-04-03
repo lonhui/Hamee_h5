@@ -77,15 +77,12 @@ class ShareDetails extends Component {
   getUserInfo=()=>{
     setTimeout(()=>{
       getReferrerInfo().then((res)=>{
-        console.log(res)
-        if(res.code==0){
+        if(res.code===0){
           this.setState({fromInfo:res.data})
           let fromInfoStr = JSON.stringify(res.data)
           setCookie("fromInfoStr",fromInfoStr,1)
           setCookie("InviterId",res.data.id,1)
         }
-      }).catch((error)=>{
-        console.log(error)
       })
     },500)
   }
@@ -96,22 +93,18 @@ class ShareDetails extends Component {
     }
     setTimeout(()=>{
       getReferrerInfoSetu(data).then((res)=>{
-        console.log(res.data)
-        if(res.code==0){
+        if(res.code===0){
           this.setState({fromInfo:res.data})
           let fromInfoStr = JSON.stringify(res.data)
           setCookie("fromInfoStr",fromInfoStr,1)
           setCookie("InviterId",res.data.id,1)
         }
-      }).catch((error)=>{
-        console.log(error)
       })
     },500)
   }
     // 获取商品详情
     getDetails=(id)=>{
         getProductDetails(id).then((res)=>{
-            console.log(res)
             if(res.code===0){
                 for(let i=0;i<res.data.variants.length;i++){
                     for(let j=0;j<res.data.images.length;j++){
@@ -164,7 +157,6 @@ class ShareDetails extends Component {
             ]
         }
         priceCalculation(data).then((res)=>{
-            console.log(res)
             let ProductInfo={
                 title:this.state.data.title,
                 count:this.state.count,
@@ -227,15 +219,13 @@ class ShareDetails extends Component {
             count:++this.state.count
         })
     }
-    onChange=(a, b, c)=>{
-        console.log(a, b, c);
-      }
+   
   render() {
     return (
         <Spin spinning={this.state.loading} tip="Loading...">
             <div className="ProductDetails" style={{height:height}}>
                 <div className="header">
-                    <Carousel afterChange={this.onChange}>
+                    <Carousel>
                         {
                             this.state.images.map((item,index)=>{
                                 return <img src={item.src} alt="" key={index}/>

@@ -63,12 +63,9 @@ class addAreaPage extends Component {
                     uid:uid
                 }
                 addArea(data).then((res)=>{
-                    console.log(res)
                     if(res.code==0){
                         this.props.history.push({pathname: `/OrderPage`})
                     }
-                }).catch((error)=>{
-                    console.log(error)
                 })
             }            
         }

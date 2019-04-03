@@ -63,8 +63,6 @@ class InvitePage extends Component {
     this.getBarrageList()
     const url = window.location.href
     let InviterIdArray = url.match(/[^a-zA-Z0-9]InviterId{1,9}=([0-9\-]+)/)//获取地址栏邀请人id
-    console.log("InviterIdArray")
-    console.log(InviterIdArray)
     if(InviterIdArray&&InviterIdArray!=null){
       if(InviterIdArray.length>1){
         let InviterId = InviterIdArray[1]
@@ -109,15 +107,12 @@ class InvitePage extends Component {
   getUserInfo=()=>{
     setTimeout(()=>{
       getReferrerInfo().then((res)=>{
-        console.log(res)
-        if(res.code==0){
+        if(res.code===0){
           this.setState({fromInfo:res.data})
           let fromInfoStr = JSON.stringify(res.data)
           setCookie("fromInfoStr",fromInfoStr,1)
           setCookie("InviterId",res.data.id,1)
         }
-      }).catch((error)=>{
-        console.log(error)
       })
     },500)
   }
@@ -128,23 +123,19 @@ class InvitePage extends Component {
     }
     setTimeout(()=>{
       getReferrerInfoSetu(data).then((res)=>{
-        console.log(res.data)
-        if(res.code==0){
+        if(res.code===0){
           this.setState({fromInfo:res.data})
           let fromInfoStr = JSON.stringify(res.data)
           setCookie("fromInfoStr",fromInfoStr,1)
           setCookie("InviterId",res.data.id,1)
         }
-      }).catch((error)=>{
-        console.log(error)
       })
     },500)
   }
   //获取弹幕名单
   getBarrageList=()=>{
     getBarrageList().then((res)=>{
-      console.log(res)
-      if(res.code==0){
+      if(res.code===0){
         if(this.state.userNames.length>0){
           let data = this.state.userNames.concat(res.data)
           this.setState({
@@ -156,15 +147,12 @@ class InvitePage extends Component {
           })
         }
       }
-    }).catch((error)=>{
-      console.log(error)
     })
   }
   // 获取礼包列表
   getProductList=()=>{
     getProducts().then((res)=>{
-      console.log(res)
-      if(res.code==0){
+      if(res.code===0){
         let data
         if(res.data.products.length>6){
          data = res.data.products.slice(0,6)
@@ -187,7 +175,6 @@ class InvitePage extends Component {
         })
       }
     }).catch((error)=>{
-      console.log(error)
       this.setState({
         loading:false
       })
@@ -220,7 +207,7 @@ class InvitePage extends Component {
     this.setState({
       testName:this.getname()
     })
-    let timer = setInterval(()=>{
+    setInterval(()=>{
         if(count>10){
           this.setState({
             MoveUp:this.state.MoveUp-1,
@@ -241,8 +228,6 @@ class InvitePage extends Component {
             textColor:'rgba(7,7,7,1)',
             testName:this.getname()
           })
-          count=0
-          // clearInterval(timer)
         }
     },100)
   }
@@ -251,7 +236,6 @@ class InvitePage extends Component {
     if(a>120 && a>this.state.userNames.length-10){
       this.getBarrageList()
     }
-    console.log(a,this.state.userNames.length-10)
     this.setState({nameIndex:++this.state.nameIndex})
     let name = this.state.userNames[a]
     return name

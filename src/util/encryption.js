@@ -33,21 +33,15 @@ const encryption=()=>{
     if (token) {   //token 和time 需要加密 但是不能明文放在请求header 里面
         encryptHeader['token'] = token
     }
-    console.log("加密")
-    console.log(encryptHeader)
-
     return Encrypt(encryptHeader,publicKey)
 }
 
 const PublicKey=()=>{
     getPublicKey().then((res)=>{
-        console.log(res)
         if(res.code==0){
           setCookie("publicKey",res.data,1)
           return res.data
         }
-    }).catch((error)=>{
-        console.log(error)
     })
 }
 

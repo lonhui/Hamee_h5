@@ -63,7 +63,6 @@ class ProductDetails extends Component {
     // 获取商品详情
     getDetails=(id)=>{
         getProductDetails(id).then((res)=>{
-            console.log(res)
             if(res.code===0){
                 for(let i=0;i<res.data.variants.length;i++){
                     for(let j=0;j<res.data.images.length;j++){
@@ -109,9 +108,7 @@ class ProductDetails extends Component {
         }
     }
     getUserInfo=(uid)=>{
-        console.log(uid)
         getInviterInfo({uid:uid}).then((res)=>{
-            console.log(res)
             if(res.code==0){
                 return res.data.level
             }
@@ -130,7 +127,6 @@ class ProductDetails extends Component {
             ]
         }
         priceCalculation(data).then((res)=>{
-            console.log(res)
             let ProductInfo={
                 title:this.state.data.title,
                 count:this.state.count,
@@ -195,15 +191,12 @@ class ProductDetails extends Component {
             count:++this.state.count
         })
     }
-    onChange=(a, b, c)=>{
-        console.log(a, b, c);
-      }
   render() {
     return (
         <Spin spinning={this.state.loading} tip="Loading...">
             <div className="ProductDetails" style={{height:height}}>
                 <div className="header">
-                    <Carousel afterChange={this.onChange}>
+                    <Carousel>
                         {
                             this.state.images.map((item,index)=>{
                                 return <img src={item.src} alt="" key={index}/>

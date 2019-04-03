@@ -11,7 +11,7 @@
             let arr=document.cookie.split(';');
             for(let i = 0;i<arr.length;i++){
                 let arr2 = arr[i].split('=');
-                if(arr2[0].trim()==key){
+                if(arr2[0].trim()===key){
                     return arr2[1]
                 }
             }

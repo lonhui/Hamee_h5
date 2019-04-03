@@ -72,7 +72,6 @@ class SignUpPage extends Component {
             }
             //****发送请求*******
             signUp(data).then((res)=>{
-                console.log(res)
                 this.setState({loading:false})
                 if(res.code===0){
                     message.success('registration success!')
@@ -97,7 +96,6 @@ class SignUpPage extends Component {
                     this.setState({loading:false})
                 }
             }).catch((error)=>{
-                console.log(error)
                 this.setState({loading:false})
             })
     }

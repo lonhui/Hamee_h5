@@ -58,21 +58,12 @@ class GoDownloadPage extends Component {
                         }
                         
                     </div>
-                    {/* <div className="LotteryTicketList">
-                        <img src={require("../../images/img_new@2x.png")} alt=""/>
-                        <p className="Amount">Rp20,000</p>
-                        <p className="coupon">Coupon</p>
-                    </div> */}
+                   
                     <div className="DownloadTips">
                         <p>You can enjoy 1% off when you log in to the new APP member.</p>
                     </div>
                 </div>
                 <div className="footer">
-                    {/* <Row>
-                        <Col span={4} className="image"><img src={require("../../images/member_icon_download@2x.png")} alt=""/></Col>
-                        <Col span={20}>Download APP immediately to receive 400K newcomer subsidy</Col>
-                    </Row> */}
-
                     <div className="DownloadButton">
                         <a href="https://play.google.com/store/apps/details?id=com.hamee">
                             <p style={{color:'#fff'}}>Go download</p>
