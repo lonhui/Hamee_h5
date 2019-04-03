@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './ProductDetails.css'
 import { Row, Col, Drawer, Radio, message,Button,Spin,Carousel  } from 'antd';
 import {getCookie, setCookie} from "../../util/Cookie"
-import {getProductDetails,priceCalculation,getInviterInfo,getReferrerInfoSetu,getUserInfo,getReferrerInfo} from "../../api/index"
+import {getProductDetails,priceCalculation,getReferrerInfoSetu,getReferrerInfo} from "../../api/index"
 import {PublicKey} from "../../util/encryption"
 
 const height = document.documentElement.clientHeight
@@ -108,24 +108,6 @@ class ShareDetails extends Component {
       })
     },500)
   }
-    // 获取用户信息
-    // getUserInfo=(uid)=>{
-    //     let data={
-    //         uid:uid
-    //     }
-    //     getUserInfo(data).then((res)=>{
-    //         console.log(res)
-    //         if(res.code===0){
-    //           this.setState({
-    //             InviterId:res.data.refUid
-    //           })
-    //           setCookie('InviterId',res.data.refUid,1)
-    //           this.getInviterInfo(res.data.refUid)
-    //         }
-    //       }).catch((error)=>{
-    //         console.log(error)
-    //       })
-    // }
     // 获取商品详情
     getDetails=(id)=>{
         getProductDetails(id).then((res)=>{
@@ -157,16 +139,9 @@ class ShareDetails extends Component {
         if(this.state.selectID!=null&&this.state.count>0){
             // 判断是否登录
             if(getCookie('uid')!=null){
-                // 是，判断是否为会员
-                let uid = getCookie('uid')
-                let lv = Number(getCookie("type"))
-                if(lv>=1){
-                    message.warning("Already a member can't buy a gift pack!")
-                }else{
-                    // 否，跳转到订单详情
-                    this.setState({loading:true})
-                    this.priceCalculation()
-                }
+                // 否，跳转到订单详情
+                this.setState({loading:true})
+                this.priceCalculation()
             }else{
                 // 否，跳转到登录页
                 this.props.history.push('/Login')

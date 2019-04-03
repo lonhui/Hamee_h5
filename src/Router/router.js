@@ -1,9 +1,9 @@
 import Loadable from 'react-loadable';
 // 邀请购买礼包流程页面
 
-import OrderPage from '../pages/Order/OrderPage';
-import ProductList from '../pages/ProductList/ProductList';
-import ProductDetails from '../pages/ProductDetails/ProductDetails';
+// import OrderPage from '../pages/Order/OrderPage';
+// import ProductList from '../pages/ProductList/ProductList';
+// import ProductDetails from '../pages/ProductDetails/ProductDetails';
 
 
 const loadable = (filename) => Loadable({
@@ -30,7 +30,7 @@ const routers = [
     },
     {
         path:'/OrderPage',
-        component:OrderPage
+        component:loadable("/Order/OrderPage")
         // loadable("/Order/OrderPage")
     },
     {
@@ -40,11 +40,11 @@ const routers = [
     {
         // loadable("/ProductList/ProductList")
         path:'/ProductList',
-        component:ProductList
+        component:loadable("/ProductList/ProductList")
     },
     {
         path:'/ProductDetails',
-        component:ProductDetails
+        component:loadable("/ProductDetails/ProductDetails")
         // loadable("/ProductDetails/ProductDetails")
     },
     {
