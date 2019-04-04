@@ -8,7 +8,7 @@ import {setCookie, getCookie} from './util/Cookie'
 
 class App extends Component {
   componentDidMount(){
-    if(getCookie("publicKey")===null||getCookie("publicKey")===''){
+    if(getCookie("publicKey")==null||getCookie("publicKey")==''){
       const publicKey = PublicKey()
       setCookie("publicKey",publicKey,1)
     }
