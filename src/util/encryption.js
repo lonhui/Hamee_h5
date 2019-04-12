@@ -38,9 +38,11 @@ const encryption=()=>{
 
 const PublicKey=()=>{
     getPublicKey().then((res)=>{
-        if(res.code==0){
-          setCookie("publicKey",res.data,1)
-          return res.data
+        if(res&&res.code==0){
+            if(res.data){
+                setCookie("publicKey",res.data,1)
+                return res.data
+            }
         }
     })
 }

@@ -63,7 +63,7 @@ class ProductDetails extends Component {
     // 获取商品详情
     getDetails=(id)=>{
         getProductDetails(id).then((res)=>{
-            if(res.code===0){
+            if(res && res.code===0){
                 for(let i=0;i<res.data.variants.length;i++){
                     for(let j=0;j<res.data.images.length;j++){
                         if(res.data.variants[i].image_id==res.data.images[j].id){

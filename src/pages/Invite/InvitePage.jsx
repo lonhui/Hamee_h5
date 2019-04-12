@@ -7,10 +7,11 @@ import {getProducts,getBarrageList,getReferrerInfo,getReferrerInfoSetu} from "..
 import {PublicKey} from '../../util/encryption'
 import {Invite} from '../../Language/id'
 
+// import { Player } from 'video-react';
+// import "../../../node_modules/video-react/dist/video-react.css";
 
 if(getCookie("publicKey")==null||getCookie("publicKey")==''){
   const publicKey = PublicKey()
-  setCookie("publicKey",publicKey,1)
 }
 
 const height = document.documentElement.clientHeight
@@ -256,6 +257,7 @@ class InvitePage extends Component {
           )
         }
           <div className="InviteHeader">
+                {/* <div style={{height:10}}></div> */}
                 <div style={{height:70}}></div>
                 {/* 头部文字 */}
                 <div className='Invite_title'>
@@ -266,6 +268,14 @@ class InvitePage extends Component {
                   <p className="year">——— 2019 ———</p>
                 </div>
           </div>
+          {/* 视频 */}
+          {/* <div style={{padding:16,marginTop:10,marginBottom:30}}>
+            <Player
+              playsInline
+              // poster="images/member_bg3@2x.jpg"
+              src="https://media.w3.org/2010/05/sintel/trailer_hd.mp4"
+            />
+          </div> */}
           {/* 会员福利 */}
           <div className="VipWelfare">
               <p>{Invite.Member_Benefits}</p>
