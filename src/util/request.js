@@ -10,12 +10,9 @@ const service = axios.create({
 
 axios.defaults.withCredentials = true
 
-let configUrl=null
-
 // request拦截器
 service.interceptors.request.use(config => {
-  configUrl = config.url
-  if(config.url!="/user/getKey"){
+  if(config.url !== "/user/getKey"){
     config.headers['decry-content'] = encryption()
   }
   return config
@@ -30,14 +27,14 @@ service.interceptors.response.use(
     if(res.code){
         if (res.code !== 0) {
             message.error(res.msg);
-            console.log(res)
+            // console.log(res)
         }
     }
     return response.data
   },
   error => {
     message.error(error.message)
-    console.log(error)
+    // console.log(error)
   }
 )
 

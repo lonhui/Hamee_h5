@@ -3,7 +3,6 @@ import './ProductDetails.css'
 import { Row, Col, Drawer, Radio, message,Button,Spin,Carousel  } from 'antd';
 import {getCookie, setCookie} from "../../util/Cookie"
 import {getProductDetails,priceCalculation,getReferrerInfoSetu,getReferrerInfo} from "../../api/index"
-import {PublicKey} from "../../util/encryption"
 
 const height = document.documentElement.clientHeight
 const RadioGroup = Radio.Group;
@@ -31,7 +30,6 @@ class ShareDetails extends Component {
     }
     componentDidMount(){
         setCookie("enterType",1,1)//在cookie中标记用户的进入类型，0首页会员礼包进入，1商品分享进入
-        const publicKey = PublicKey()
         const url = window.location.href
         let productIdArr = url.match(/[^a-zA-Z0-9]id{1,2}=([0-9\-]+)/)
         let InviterIdArr = url.match(/[^a-zA-Z0-9]InviterId{1,9}=([0-9\-]+)/)
@@ -44,7 +42,7 @@ class ShareDetails extends Component {
             }else{
                 if(getCookie('selectedProductId')){
                     this.getDetails(getCookie('selectedProductId'))
-                    if(getCookie('InviterId')===null){this.getInviterId(InviterIdArr)}
+                    if(!getCookie('InviterId')){this.getInviterId(InviterIdArr)}
                 }else{
                     this.props.history.push({pathname: `/`})
                 }
@@ -52,7 +50,7 @@ class ShareDetails extends Component {
         }else{
             if(getCookie('selectedProductId')){
                 this.getDetails(getCookie('selectedProductId'))
-                if(getCookie('InviterId')===null){this.getInviterId(InviterIdArr)}
+                if(!getCookie('InviterId')){this.getInviterId(InviterIdArr)}
             }else{
                 this.props.history.push({pathname: `/`})
             }
@@ -208,15 +206,17 @@ class ShareDetails extends Component {
     // 减
     less=()=>{
         if(this.state.count>1){
+            let count = this.state.count
             this.setState({
-                count:--this.state.count
+                count:--count
             })
         }
     }
     // 加
     add=()=>{
+        let count = this.state.count
         this.setState({
-            count:++this.state.count
+            count:++count
         })
     }
    
@@ -242,7 +242,7 @@ class ShareDetails extends Component {
                 </div>
 
                 {
-                    this.state.fromInfo.id==null||this.state.fromInfo.id==''?null:(
+                    !this.state.fromInfo.id || this.state.fromInfo.id === '' ? null:(
                         <div className="user">
                             <Row>
                                 <Col span={6} className="userImg">

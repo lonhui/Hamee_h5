@@ -16,12 +16,12 @@ class ProductList extends Component {
         window.scrollTo(0,0)
         this.getProductList()
     }
-    getProductList=()=>{
-        getProducts().then((res)=>{
-          if(res.code==0){
-            res.data.products.map((item)=>{
+    getProductList = () => {
+        getProducts().then((res) => {
+          if(res && res.code === 0){
+            res.data.products.map((item) => {
                 if(item.title.length>30){
-                    item.title=item.title.substring(0,27)+"..."
+                    item.title = item.title.substring(0,27)+"..."
                 }
             })
             this.setState({
@@ -31,7 +31,7 @@ class ProductList extends Component {
           }
         })
       }
-    gotoProductDetails=(id)=>{
+    gotoProductDetails = (id) => {
         this.props.history.push({pathname: `/ProductDetails`, state: {id:id}})
       }
     render(){
@@ -40,7 +40,7 @@ class ProductList extends Component {
                 <div className="ProductsList">
                     <div className="dataList" >
                         {
-                            this.state.data.map((item,index)=>{
+                            this.state.data.map((item,index) => {
                                 return<Product key={index} goto={this.gotoProductDetails} product={item} borderStatus={false}/>
                             })
                         }

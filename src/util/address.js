@@ -499,7 +499,7 @@
         })
         for(var i = 0; i < provinceData.length-1; i++){
             for(var j = i+1; j < provinceData.length; j++){
-                if(provinceData[i]==provinceData[j]){
+                if(provinceData[i]===provinceData[j]){
                     provinceData.splice(j,1);
                     j--;
                 }
@@ -512,7 +512,7 @@
     const getCity=(province)=>{
         let city=[]
         Address.map((item)=>{
-            if(item.Province==province){
+            if(item.Province===province){
                 city.push(item.City)
             }
         })

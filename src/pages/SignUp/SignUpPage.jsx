@@ -30,17 +30,17 @@ class SignUpPage extends Component {
         }
     }
     // 验证码倒计时
-    getVFCode=()=>{
-        if(this.state.phone.length>8){
-            getSMS({mobile:this.state.countyCode+this.state.phone,type:1}).then((res)=>{
-                if(res.code===0){
+    getVFCode = () => {
+        if(this.state.phone.length > 8){
+            getSMS({mobile:this.state.countyCode + this.state.phone, type:1}).then((res) => {
+                if(res && res.code === 0){
                     if(!this.state.getVFCodeStatus){
                         this.setState({
                             getVFCodeStatus:true,
                             timeCount:60
                         })
-                        const timer = setInterval(()=>{
-                            if(this.state.timeCount<1){
+                        const timer = setInterval(() => {
+                            if(this.state.timeCount < 1){
                                 clearTimeout(timer)
                                 this.setState({
                                     getVFCodeStatus:false,
@@ -55,37 +55,37 @@ class SignUpPage extends Component {
                 }else{
                     this.setState({loading:false})
                 }
-            }).catch((error)=>{
+            }).catch((error) => {
                 this.setState({loading:false})
             })
         }else{
             message.error("please enter a valid phone number!")
         }
     }
-    signUp=()=>{
+    signUp = () => {
         this.setState({loading:true})
-            let data={
-                mobile:this.state.countyCode+this.state.phone,
+            let data = {
+                mobile:this.state.countyCode + this.state.phone,
                 referrerId:getCookie("InviterId"),
                 code:this.state.code,
                 passwd:this.state.password
             }
             //****发送请求*******
-            signUp(data).then((res)=>{
+            signUp(data).then((res) => {
                 this.setState({loading:false})
-                if(res.code===0){
+                if(res && res.code === 0){
                     message.success('registration success!')
                     setCookie('uid',res.data.id,1)
                     setCookie('token',res.data.token,1)
                     let enterType = Number(getCookie("enterType"))
                     let isSelect = getCookie("isSelect")
-                    if(enterType===0){
+                    if(enterType === 0){
                         if(isSelect){
                             this.props.history.push('/OrderPage')
                         }else{
                             this.props.history.push('/ProductDetails')
                         }
-                    }else if(enterType===1){
+                    }else if(enterType === 1){
                         if(isSelect){
                             this.props.history.push('/OrderPage')
                         }else{
@@ -95,17 +95,17 @@ class SignUpPage extends Component {
                 }else{
                     this.setState({loading:false})
                 }
-            }).catch((error)=>{
+            }).catch((error) => {
                 this.setState({loading:false})
             })
     }
     // 下一步
-    nextButton=()=>{
-        if(this.state.phone.length<1){
+    nextButton = () => {
+        if(this.state.phone.length < 1){
             message.error('Nomor telepon tidak boleh kosong!');
-        }else if(this.state.password.length<8){
+        }else if(this.state.password.length < 8){
             message.error('Panjang kata sandi harus lebih dari atau sama dengan 8 digit!');
-        }else if(this.state.code.length<1){
+        }else if(this.state.code.length < 1){
             message.error('kode verifikasi harus diisi!');
         }else if(!this.state.RuleAgreedStatus){
             message.warning('Harap setujui dan tandai Perjanjian Pengguna!');
@@ -114,10 +114,10 @@ class SignUpPage extends Component {
         }
     }
 
-    openModal=()=>{this.setState({visible:true})}
-    onChangePhone=(event)=>{this.setState({phone:event.target.value})}// 手机号输入
-    onChangePassword=(event)=>{this.setState({password:event.target.value})}//密码输入
-    onChangeCode=(event)=>{this.setState({code:event.target.value})}//验证码输入
+    openModal = () => {this.setState({visible:true})}
+    onChangePhone = (event) => {this.setState({phone:event.target.value})}// 手机号输入
+    onChangePassword = (event) => {this.setState({password:event.target.value})}//密码输入
+    onChangeCode = (event) => {this.setState({code:event.target.value})}//验证码输入
 
   render() {
     return (
@@ -146,10 +146,10 @@ class SignUpPage extends Component {
                 <span>sandi</span>
                 <Row className="signUp_password_input">
                     <Col span={21}>
-                        <input type={this.state.eyeStatus?"text":"password"} placeholder="Masukkan nomor password anda" value={this.state.password} onChange={this.onChangePassword}/>
+                        <input type={this.state.eyeStatus ? "text" : "password"} placeholder="Masukkan nomor password anda" value={this.state.password} onChange={this.onChangePassword}/>
                     </Col>
                     <Col span={3}>
-                        <img src={this.state.eyeStatus?eye_y:eye_n} onClick={()=>{
+                        <img src={this.state.eyeStatus ? eye_y : eye_n} onClick={()=>{
                             this.setState({
                                 eyeStatus:!this.state.eyeStatus
                             })
@@ -164,14 +164,14 @@ class SignUpPage extends Component {
                 <Row className="signUp_vfcode_input">
                     <Col span={16} style={{color:'#fff'}}><input type="text" placeholder="Please enter" value={this.state.code} onChange={this.onChangeCode}/></Col>
                     <Col span={1}></Col>
-                    <Col span={7}><div className="signUp_vfButton" onClick={this.getVFCode}>{this.state.getVFCodeStatus?this.state.timeCount+" s":"Verifikasi"}</div></Col>
+                    <Col span={7}><div className="signUp_vfButton" onClick={this.getVFCode}>{this.state.getVFCodeStatus ? this.state.timeCount + " s" : "Verifikasi"}</div></Col>
                 </Row>
             </div>
             <div className="signUp_selectRule">
-                <img src={this.state.RuleAgreedStatus?agree:NoAgree} onClick={()=>{
+                <img src={this.state.RuleAgreedStatus?agree:NoAgree} onClick={() => {
                     this.setState({RuleAgreedStatus:!this.state.RuleAgreedStatus})
                 }}/>
-                <span onClick={()=>{
+                <span onClick={() => {
                     this.props.history.push('/UserAgreement')
                 }}>Saya setuju dengan ketentuan & kondisi</span>
             </div>
@@ -181,8 +181,8 @@ class SignUpPage extends Component {
         </div>
         <InviterUps visible={this.state.visible} 
             height={height}
-            closeModal={()=>{this.setState({visible:false})}}
-            determine={()=>{
+            closeModal={() => {this.setState({visible:false})}}
+            determine={() => {
                 this.setState({visible:false})
                 this.signUp()
             }}/>

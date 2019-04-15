@@ -10,12 +10,15 @@ import {Invite} from '../../Language/id'
 // import { Player } from 'video-react';
 // import "../../../node_modules/video-react/dist/video-react.css";
 
-if(getCookie("publicKey")==null||getCookie("publicKey")==''){
-  const publicKey = PublicKey()
+if(!getCookie("publicKey")||getCookie("publicKey")===''){
+  PublicKey()
 }
+
+let timeid = null//定时器
 
 const height = document.documentElement.clientHeight
 const fromImg = require("../../images/member_img_avatar@2x.png")
+
 class InvitePage extends Component {
   constructor(props){
     super(props);
@@ -54,17 +57,18 @@ class InvitePage extends Component {
   componentDidMount(){
     setCookie("enterType",0,1)//在cookie中标记用户的进入类型，0首页会员礼包进入，1商品分享进入
     // 判断用户是否是会员
-    if(this.state.userType!=0){
+    if(this.state.userType !== 0){
       this.setState({
         MoveUp:20
       })
     }
+    // 滚动条回到顶部
     window.scrollTo(0,0)
     this.getProductList()
     this.getBarrageList()
     const url = window.location.href
     let InviterIdArray = url.match(/[^a-zA-Z0-9]InviterId{1,9}=([0-9\-]+)/)//获取地址栏邀请人id
-    if(InviterIdArray&&InviterIdArray!=null){
+    if(InviterIdArray&&InviterIdArray){
       if(InviterIdArray.length>1){
         let InviterId = InviterIdArray[1]
         setCookie('InviterId',InviterId,1)
@@ -79,36 +83,33 @@ class InvitePage extends Component {
     
     this.ScrollAnimation()// 开始动画
   }
+  componentWillUnmount(){
+    clearInterval(timeid)
+  }
   // 获取app传递过来的cookie
   getAppCookie(){
     let appCookies = getCookie('name')
     if(appCookies){
-      appCookies=JSON.parse(appCookies)
+      appCookies = JSON.parse(appCookies)
       if(appCookies.key){
         setCookie('publicKey',appCookies.key,1)
       }
-      if(appCookies.isVip!=null){
-        setCookie('type',appCookies.isVip?1:0,1)
-      }else{
-        // clearCookie('type')
+      if(appCookies.isVip){
+        setCookie('type',appCookies.isVip ? 1 : 0,1)
       }
       if(appCookies.id){
         setCookie('uid',appCookies.id,1)
-      }else{
-        // clearCookie('uid')
       }
       if(appCookies.token){
         setCookie('token',appCookies.token,1)
-      }else{
-        // clearCookie('token')
       }
     }
   }
   // 获取邀请人信息 无id
-  getUserInfo=()=>{
-    setTimeout(()=>{
-      getReferrerInfo().then((res)=>{
-        if(res.code===0){
+  getUserInfo = () => {
+    setTimeout(() => {
+      getReferrerInfo().then((res) => {
+        if(res && res.code === 0){
           this.setState({fromInfo:res.data})
           let fromInfoStr = JSON.stringify(res.data)
           setCookie("fromInfoStr",fromInfoStr,1)
@@ -118,13 +119,13 @@ class InvitePage extends Component {
     },500)
   }
   // 获取邀请人信息 有id
-  getInviterInfo=(InviterId)=>{
-    let data={
+  getInviterInfo = (InviterId) => {
+    let data = {
       uid:parseInt(InviterId)
     }
-    setTimeout(()=>{
-      getReferrerInfoSetu(data).then((res)=>{
-        if(res.code===0){
+    setTimeout(() => {
+      getReferrerInfoSetu(data).then((res) => {
+        if(res && res.code === 0){
           this.setState({fromInfo:res.data})
           let fromInfoStr = JSON.stringify(res.data)
           setCookie("fromInfoStr",fromInfoStr,1)
@@ -134,10 +135,10 @@ class InvitePage extends Component {
     },500)
   }
   //获取弹幕名单
-  getBarrageList=()=>{
-    getBarrageList().then((res)=>{
-      if(res.code===0){
-        if(this.state.userNames.length>0){
+  getBarrageList = () => {
+    getBarrageList().then((res) => {
+      if(res && res.code === 0){
+        if(this.state.userNames.length > 0){
           let data = this.state.userNames.concat(res.data)
           this.setState({
             userNames:data
@@ -151,18 +152,18 @@ class InvitePage extends Component {
     })
   }
   // 获取礼包列表
-  getProductList=()=>{
-    getProducts().then((res)=>{
-      if(res.code===0){
+  getProductList = () => {
+    getProducts().then((res) => {
+      if(res && res.code === 0){
         let data
-        if(res.data.products.length>6){
+        if(res.data.products.length > 6){
          data = res.data.products.slice(0,6)
         }else{
           data = res.data.products
         }
-        data.map((item)=>{
-          if(item.title.length>30){
-            item.title=item.title.substring(0,27)+"..."
+        data.map((item) => {
+          if(item.title.length > 30){
+            item.title = item.title.substring(0,27) + "..."
           }
         })
         this.setState({
@@ -175,25 +176,25 @@ class InvitePage extends Component {
           loading:false
         })
       }
-    }).catch((error)=>{
+    }).catch((error) => {
       this.setState({
         loading:false
       })
     })
   }
 
-  OneClickOpening=()=>{
-    if(this.state.userType>0){
+  OneClickOpening = () => {
+    if(this.state.userType > 0){
       // 分享
       window.postMessage("Share")
     }else{
       const GiftPackages_height = document.getElementById("GiftPackages").offsetTop;
-      document.getElementsByClassName("InvitePage")[0].scrollTop=GiftPackages_height
+      document.getElementsByClassName("InvitePage")[0].scrollTop = GiftPackages_height
     }
   }
   // 跳转至商品详情页
-  gotoProductDetails=(id)=>{
-    if(this.state.userType>0){
+  gotoProductDetails = (id) => {
+    if(this.state.userType > 0){
       message.warning(Invite.You_are_already_a_member_of_our_Hame)
     }else{
       setCookie('isSelect',true,1)
@@ -201,29 +202,29 @@ class InvitePage extends Component {
     }
   }
   // 滚动通知动画
-  ScrollAnimation=()=>{
+  ScrollAnimation = () => {
     let limit
-    this.state.userType!=0?limit=0:limit=70
+    this.state.userType !== 0 ? limit = 0 : limit = 70
     let count = 0
     this.setState({
       testName:this.getname()
     })
-    setInterval(()=>{
-        if(count>10){
+    timeid = setInterval(() => {
+        if(count > 10){
           this.setState({
-            MoveUp:this.state.MoveUp-1,
-            transparency:this.state.transparency-0.05
+            MoveUp:this.state.MoveUp - 1,
+            transparency:this.state.transparency - 0.05
           })
           this.setState({
-            backColor:'rgba(232,231,246,'+this.state.transparency+')',
-            textColor:'rgba(7,7,7,'+this.state.transparency+')',
+            backColor:'rgba(232,231,246,' + this.state.transparency + ')',
+            textColor:'rgba(7,7,7,' + this.state.transparency + ')',
           })
         }
         ++count
         // 如果上升到某个位置，回到原点显示下一个用户
-        if(this.state.MoveUp<limit-5){
+        if(this.state.MoveUp < limit - 5){
           this.setState({
-            MoveUp:limit+20,
+            MoveUp:limit + 20,
             transparency:1,
             backColor:"rgba(232,231,246,1)",
             textColor:'rgba(7,7,7,1)',
@@ -232,9 +233,9 @@ class InvitePage extends Component {
         }
     },100)
   }
-  getname=()=>{
+  getname = () => {
     let a = Number(this.state.nameIndex)
-    if(a>120 && a>this.state.userNames.length-10){
+    if(a > 120 && a > this.state.userNames.length - 10){
       this.getBarrageList()
     }
     this.setState({nameIndex:++this.state.nameIndex})
@@ -251,7 +252,7 @@ class InvitePage extends Component {
             <div className="InviteText">
                 <Row>
                     <Col span={4}><img src={fromImg} alt=""/></Col>
-                    <Col span={20}><p>{this.state.fromInfo.nickName==null?"Hamee":this.state.fromInfo.nickName} mengajak Anda untuk menjadi member Hamee</p></Col>
+                    <Col span={20}><p>{!this.state.fromInfo.nickName?"Hamee" : this.state.fromInfo.nickName} mengajak Anda untuk menjadi member Hamee</p></Col>
                 </Row>
             </div>
           )

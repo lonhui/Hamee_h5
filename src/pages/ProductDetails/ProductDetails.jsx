@@ -32,17 +32,17 @@ class ProductDetails extends Component {
         }
         
     }
-    componentDidMount(){
+    componentDidMount () {
         window.scrollTo(0,0)
         let inviterinfo = getCookie('fromInfoStr')
-        if(inviterinfo!=null&&inviterinfo!=''){
-            let fromInfoStr= getCookie('fromInfoStr')
+        if(inviterinfo && inviterinfo !== ''){
+            let fromInfoStr = getCookie('fromInfoStr')
             let fromInfo = JSON.parse(fromInfoStr)
             this.setState({fromInfo:fromInfo})
         }
         if(this.props.location.state){
             this.getDetails(this.props.location.state.id)
-        }else if(getCookie('selectedProductId')!=null){
+        }else if(getCookie('selectedProductId')){
             this.getDetails(getCookie('selectedProductId'))
         }else{
             const url = window.location.href
@@ -61,13 +61,13 @@ class ProductDetails extends Component {
         }
     }
     // 获取商品详情
-    getDetails=(id)=>{
-        getProductDetails(id).then((res)=>{
-            if(res && res.code===0){
-                for(let i=0;i<res.data.variants.length;i++){
+    getDetails = (id) => {
+        getProductDetails(id).then((res) => {
+            if(res && res.code === 0){
+                for(let i = 0;i < res.data.variants.length;i++){
                     for(let j=0;j<res.data.images.length;j++){
-                        if(res.data.variants[i].image_id==res.data.images[j].id){
-                            res.data.variants[i].imageUrl=res.data.images[j].src
+                        if(res.data.variants[i].image_id === res.data.images[j].id){
+                            res.data.variants[i].imageUrl = res.data.images[j].src
                         }
                     }
                 }
@@ -81,16 +81,15 @@ class ProductDetails extends Component {
             }
         })
     }
-    gotoProductDetails=(id)=>{
+    gotoProductDetails = (id) => {
         this.props.history.push({pathname: `/ProductDetails`, state: {id:id}})
     }
     // To pay按钮
     pay=()=>{
-        if(this.state.selectID!=null&&this.state.count>0){
+        if(this.state.selectID &&this.state.count > 0){
             // 判断是否登录
-            if(getCookie('uid')!=null){
+            if(getCookie('uid')){
                 // 是，判断是否为会员
-                let uid = getCookie('uid')
                 let lv = Number(getCookie("type"))
                 if(lv>=1){
                     message.warning("Already a member can't buy a gift pack!")
@@ -109,14 +108,14 @@ class ProductDetails extends Component {
     }
     getUserInfo=(uid)=>{
         getInviterInfo({uid:uid}).then((res)=>{
-            if(res.code==0){
+            if(res && res.code === 0){
                 return res.data.level
             }
         })
     }
     // 价格预计算
     priceCalculation(){
-        let data={
+        let data = {
             uid:getCookie('uid'),
             variants:[
                 {
@@ -135,7 +134,7 @@ class ProductDetails extends Component {
                 product_id:this.state.data.id,
                 variant_id:this.state.selectID,
             }
-            if(res.code==0){
+            if(res && res.code === 0){
                 res.data.ProductInfo=ProductInfo
                 // 订单预计算数据转为字符串存入Storage
                 let testjson = JSON.stringify(res.data)
@@ -150,7 +149,7 @@ class ProductDetails extends Component {
     showDrawer = () => {
         // 判断链接是否携带邀请人id
         let InviterId = getCookie("InviterId")
-        if(InviterId==null||InviterId==""){
+        if(!InviterId ||InviterId === ""){
             this.props.history.push({pathname: `/Login`})
             // message.error("If you have not obtained a referral, please contact the referrer to re-acquire the link!")
         }else{
@@ -164,9 +163,9 @@ class ProductDetails extends Component {
     // 关闭弹窗
     onClose = () => {this.setState({visible: false,});};
     // 选择规格
-    selectOnChange=(e)=>{
-        this.state.variants.forEach((item)=>{
-            if(item.id==e.target.value){
+    selectOnChange = (e) => {
+        this.state.variants.forEach((item) => {
+            if(item.id === e.target.value){
                 this.setState({
                     DrawerImage:item.imageUrl,
                     DrawerPrice:item.price,
@@ -178,17 +177,19 @@ class ProductDetails extends Component {
         })
     }
     // 减
-    less=()=>{
-        if(this.state.count>1){
+    less = () => {
+        if(this.state.count > 1){
+            let count = this.state.count
             this.setState({
-                count:--this.state.count
+                count:--count
             })
         }
     }
     // 加
-    add=()=>{
+    add = () => {
+        let count = this.state.count
         this.setState({
-            count:++this.state.count
+            count:++count
         })
     }
   render() {
@@ -212,14 +213,14 @@ class ProductDetails extends Component {
                     </Row>
                 </div>
                 {
-                    this.state.fromInfo.id==null||this.state.fromInfo.id==''?null:(
+                    !this.state.fromInfo.id || this.state.fromInfo.id === ''?null:(
                         <div className="user">
                             <Row>
                                 <Col span={6} className="userImg">
                                     <img src={fromImg} alt=""/> 
                                 </Col>
                                 <Col span={18} className="suerText">
-                                    <p className="user_Name">{this.state.fromInfo.nickName==null?"Hamee":this.state.fromInfo.nickName}</p>
+                                    <p className="user_Name">{!this.state.fromInfo.nickName ? "Hamee":this.state.fromInfo.nickName}</p>
                                     <p className="userInviteText">Mengajak anda untuk bergabung! </p>
                                 </Col>
                             </Row>

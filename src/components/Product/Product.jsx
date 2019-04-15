@@ -5,12 +5,12 @@ import './Product.css'
 // 单个商品
 class Product extends Component {
 
-  onClickEvent=()=>{
+  onClickEvent = () => {
     setCookie("selectedProductId",this.props.product.id,1)
     this.props.goto(this.props.product.id)
   }
   // 热卖标签
-  labelHot=()=>{
+  labelHot = () => {
     return(
       <div className="label_hot">
         <img src={require("../../images/home_icon_hot@2x.png")} alt=""/>
@@ -19,7 +19,7 @@ class Product extends Component {
     )
   }
   // 新品标签
-  labelNew=()=>{
+  labelNew = () => {
     return(
       <div className="label_new">
         <img src={require("../../images/home_icon_new@2x.png")} alt=""/>
@@ -28,7 +28,7 @@ class Product extends Component {
     )
   }
   // 秒杀标签
-  labelSpike=()=>{
+  labelSpike = () => {
     return(
       <div className="label_Spike">
         <img src={require("../../images/home_icon_snatch@2x.png")} alt=""/>
@@ -36,12 +36,12 @@ class Product extends Component {
       </div>
     )
   }
-  render() {
+  render () {
     return (
       <div className="Product" style={this.props.borderStatus?styles.borderStyle:styles.borderStyle_n } onClick={this.onClickEvent}>
          <div className="ProductImg" style={{backgroundImage: `url(${this.props.product.img})` }}>
           {
-            this.props.product._hot==true?(this.labelHot()):(this.props.product._new==true?this.labelNew():'')
+            this.props.product._hot ? (this.labelHot()) : (this.props.product._new ? this.labelNew() : '')
           }
          </div>
          <div className="ProductInfo">

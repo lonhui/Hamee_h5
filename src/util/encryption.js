@@ -36,9 +36,9 @@ const encryption=()=>{
     return Encrypt(encryptHeader,publicKey)
 }
 
-const PublicKey=()=>{
-    getPublicKey().then((res)=>{
-        if(res&&res.code==0){
+const PublicKey = () => {
+    getPublicKey().then((res) => {
+        if(res&&res.code === 0){
             if(res.data){
                 setCookie("publicKey",res.data,1)
                 return res.data
@@ -47,11 +47,11 @@ const PublicKey=()=>{
     })
 }
 
-const Encrypt=(data,key)=>{
+const Encrypt = (data,key) => {
     let AES_KEY = CryptoJS.enc.Latin1.parse(key); //16位
     let iv = CryptoJS.enc.Latin1.parse(AuthTokenIv);
     let encrypted = '';
-    if (typeof(data) == 'string') {
+    if (typeof(data) === 'string') {
 
         let srcs = CryptoJS.enc.Utf8.parse(data);
         encrypted = CryptoJS.AES.encrypt(srcs, AES_KEY, {
@@ -59,7 +59,7 @@ const Encrypt=(data,key)=>{
             mode: CryptoJS.mode.CBC,
             padding: CryptoJS.pad.Pkcs7
         });
-    } else if (typeof(data) == 'object') {//对象格式的转成json字符串
+    } else if (typeof(data) === 'object') {//对象格式的转成json字符串
         data = JSON.stringify(data);
         let srcs = CryptoJS.enc.Utf8.parse(data);
         encrypted = CryptoJS.AES.encrypt(srcs, AES_KEY, {iv:iv,

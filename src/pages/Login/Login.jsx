@@ -25,8 +25,8 @@ class Login extends Component {
             password:''
         }
     }
-    login=()=>{
-        if(this.state.RuleAgreedStatus==false){
+    login = () => {
+        if(!this.state.RuleAgreedStatus){
             message.error('please agreed to the Terms & Conditions!');
         }else if(this.state.phone.length<1){
             message.error('Phone number cannot be empty!');
@@ -37,12 +37,12 @@ class Login extends Component {
                 this.setState({loading:true})
 
                 //*****发送请求*******
-                let data={
+                let data = {
                     mobile:this.state.countyCode+this.state.phone,
                     passwd:this.state.password
                 }
-                login(data).then((res)=>{
-                    if(res.code===0){
+                login(data).then((res) => {
+                    if(res && res.code === 0){
                         setCookie('uid',res.data.id,1)
                         setCookie('token',res.data.token,1)
                         setCookie('type',res.data.level,1)
@@ -57,7 +57,7 @@ class Login extends Component {
                     }else{
                         this.setState({loading:false})
                     }
-                }).catch((error)=>{
+                }).catch((error) => {
                     this.setState({loading:false})
                 })
             }
@@ -65,12 +65,12 @@ class Login extends Component {
     }
 
     // 获取用户信息
-  getUserInfo=()=>{
+  getUserInfo = () => {
     let data={
       uid:getCookie('uid')
     }
-    getUserInfo(data).then((res)=>{
-      if(res.code==0){
+    getUserInfo(data).then((res) => {
+      if(res && res.code === 0){
         this.setState({
           InviterId:res.data.refUid
         })
@@ -78,17 +78,16 @@ class Login extends Component {
       }else{
         this.setState({loading:false})
       }
-    }).catch((error)=>{
+    }).catch((error) => {
         this.setState({loading:false})
     })
   }
 
     
-    onChangePhone=(event)=>{this.setState({phone:event.target.value})}// 手机号输入
-    onChangePassword=(event)=>{this.setState({password:event.target.value})}//密码输入
+    onChangePhone = (event) => {this.setState({phone:event.target.value})}// 手机号输入
+    onChangePassword = (event) => {this.setState({password:event.target.value})}//密码输入
 
   render() {
-    
     return (
         <Spin spinning={this.state.loading} tip="Loading...">
             <div className="Login" style={{height:height}}>
@@ -115,10 +114,10 @@ class Login extends Component {
                     <span>sandi</span>
                     <Row className="password_input">
                         <Col span={21}>
-                            <input type={this.state.eyeStatus?"text":"password"} placeholder="Silahkan masukkan password anda" value={this.state.password} onChange={this.onChangePassword}/>
+                            <input type={this.state.eyeStatus ? "text" : "password"} placeholder="Silahkan masukkan password anda" value={this.state.password} onChange={this.onChangePassword}/>
                         </Col>
                         <Col span={3}>
-                            <img src={this.state.eyeStatus?eye_y:eye_n} onClick={()=>{
+                            <img src={this.state.eyeStatus ? eye_y : eye_n} onClick={() => {
                                 this.setState({
                                     eyeStatus:!this.state.eyeStatus
                                 })
@@ -137,10 +136,10 @@ class Login extends Component {
                     }}>Daftar baru</span></Col>
                 </Row>
                  <div className="selectRule">
-                    <img src={this.state.RuleAgreedStatus?agree:NoAgree} onClick={()=>{
+                    <img src={this.state.RuleAgreedStatus?agree:NoAgree} onClick={() => {
                         this.setState({RuleAgreedStatus:!this.state.RuleAgreedStatus})
                     }}/>
-                    <span onClick={()=>{
+                    <span onClick={() => {
                         this.props.history.push('/UserAgreement')
                     }}>Menyetujui syarat dan ketentuan</span>
                 </div>

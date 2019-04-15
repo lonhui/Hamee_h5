@@ -27,10 +27,10 @@ class Login extends Component {
     }
     getProductInfo=(productId)=>{
         getProductDetails(productId).then((res)=>{
-            if(res.code==0){
+            if(res && res.code === 0){
                 for(let i=0;i < res.data.images.length;i++){
                     for(let j=0;j<res.data.variants.length;j++){
-                        if(res.data.images[i].id==res.data.variants[j].image_id){
+                        if(res.data.images[i].id === res.data.variants[j].image_id){
                             res.data.variants[j].image=res.data.images[i].src
                         }
                     }
